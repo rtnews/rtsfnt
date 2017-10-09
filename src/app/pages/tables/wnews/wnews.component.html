@@ -1,0 +1,11 @@
+<nb-card>
+  <nb-card-header>
+    <span>全局动态</span>
+    <button class="btn btn-primary btn-sm" (click)="pushNews()">添 加</button>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings">
+	</ng2-smart-table>
+  </nb-card-body>
+</nb-card>

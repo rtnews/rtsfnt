@@ -1,0 +1,40 @@
+<div>
+	<div class="modal-header">
+		<span>公安要闻</span>
+		<button class="close" aria-label="Close" (click)="closeModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div *ngIf="errors">
+			<span>{{ errors }}</span>
+		</div>
+		<div class="uploads" *ngIf="files?.length">
+			<div class="upload-item" *ngFor="let f of files; let i = index;">
+			  <div class="upload-item-top">
+				<span class="filename">{{ f.name }}</span>
+				<span class="progress-data">
+					速度: {{ f.progress.data.speedHuman }}	进度: {{ f.progress.data.percentage }}%}
+				</span>
+				<span class="x" (click)="removeFile(f.id)">x</span>
+			  </div>
+			  <div class="progress-bar-container">
+				<div class="bar" [style.width]="f.progress.data.percentage + '%'" [class.green]="f.responseStatus === 200"></div>
+			  </div>
+			</div>
+		</div>
+		<div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+			<h1>把.docx文件拖放到这个区域</h1>
+			<p>
+				<span>或者选择文件:</span>
+				<label class="upload-button">
+					<input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple>
+					浏览
+				</label>
+			</p>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-md btn-primary btn-sm" (click)="startUpload()">开始上传</button>
+	</div>
+</div>
