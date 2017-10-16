@@ -16,7 +16,7 @@ export class AuthService implements CanActivate {
             }
         });
         if (isAuth) return true;
-        //this.router.navigateByUrl('/auth/login');
-        return true;
+        this.router.navigateByUrl('/auth/login');
+        return false;
     }
 }
