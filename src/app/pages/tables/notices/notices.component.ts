@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { SmartTableService } from '../../../@core/data/smart-table.service';
+import { SmartTableService, ImageNews } from '../../../@core/data/smart-table.service';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'ngx-notices',
@@ -39,19 +42,21 @@ export class NoticesComponent {
       position: 'right', // left|right
     },
     columns: {
-      id: {
-        title: '编号',
-        type: 'number',
-        width: '150px'
+      FileName: {
+        title: '文件名',
+        type: 'string'
       },
-      title: {
+      Title: {
         title: '标题',
         type: 'string'
       },
-      time: {
+      Text: {
+        title: '正文',
+        type: 'string'
+      },
+      Time: {
         title: '时间',
-        type: 'string',
-        width: '250px'
+        type: 'string'
       }
     },
     noDataMessage: '没有数据',
@@ -59,11 +64,28 @@ export class NoticesComponent {
   
   source: LocalDataSource = new LocalDataSource();
   
-  constructor(private service: SmartTableService) {
-    //const data = this.service.getNoticesData();
-    //this.source.load(data);
+  constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
+    this.loadImageNews();
+    
+    service.changeNotice.subscribe((value:ImageNews)=>{
+      this.source.prepend(value);
+    })
+  }
+  
+  loadImageNews() {
+    this.http.get('/api/news/getnoticelist').subscribe(res => {
+      (res as ImageNews[]).forEach(i => {
+        this.source.append(i);
+      });
+    });
   }
   
   pushNews() {
+    const activeModal = this.modalService.open(ModalComponent, {
+      backdrop: 'static',
+      container: 'nb-layout',
+      size: 'lg',
+    });
+    activeModal.componentInstance.setModalsData(1);
   }
 }

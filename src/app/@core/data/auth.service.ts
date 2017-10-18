@@ -10,7 +10,6 @@ export class AuthService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         let isAuth = false;
         this.auth.isAuthenticated().subscribe((result) => {
-            console.log(result);
             if (null != result) {
                 isAuth = true;
             }

@@ -1,12 +1,29 @@
 import { Component,EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions } from 'ngx-uploader';
+import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions, UploadStatus } from 'ngx-uploader';
+import { ModalsData } from './modal.data'
+import { SmartTableService } from '../../../@core/data/smart-table.service';
 
 interface FormData {
   concurrency: number;
   autoUpload: boolean;
   verbose: boolean;
 }
+
+const MODALSDATA:ModalsData[] = [
+	{
+		url:'/Upload/UploadHomeNews',
+		name:'公安要闻'
+	},
+	{
+		url:'/Upload/UploadNoticeNews',
+		name:'通知通报'
+	},
+	{
+		url:'/Upload/UploadGlobalNews',
+		name:'全局动态'
+	},
+];
 
 @Component({
   selector: 'ngx-modal',
@@ -15,7 +32,10 @@ interface FormData {
 })
 
 export class ModalComponent {
-	
+
+	fileOk:string[];
+	modalsIndex:number;
+	modalsData:ModalsData;
 	formData: FormData;
 	files: UploadFile[];
 	uploadInput: EventEmitter<UploadInput>;
@@ -24,7 +44,7 @@ export class ModalComponent {
 	options: UploaderOptions;
 	errors:string;
 
-	constructor(private activeModal: NgbActiveModal)
+	constructor(private activeModal: NgbActiveModal, private service: SmartTableService)
 	{
 		this.options = { concurrency: 1 };
 		this.formData = {
@@ -32,6 +52,13 @@ export class ModalComponent {
 			autoUpload: false,
 			verbose: true
 		};
+		this.fileOk = [
+			'准备中',
+			'上传中(无法删除)',
+			'上传完成',
+			'取消'
+		];
+
 		this.files = [];
 		this.errors = '';
 		this.uploadInput = new EventEmitter<UploadInput>();
@@ -41,18 +68,14 @@ export class ModalComponent {
 	closeModal() {
 		this.activeModal.close();
 	}
+
+	setModalsData(index:number): void {
+		this.modalsData = MODALSDATA[index];
+		this.modalsIndex = index;
+	}
 	
 	onUploadOutput(output: UploadOutput): void {
-		console.log(output);
-		
 		if (output.type === 'allAddedToQueue') {
-			// const event: UploadInput = {
-			// 	type: 'uploadAll',
-			// 	url: 'http://ngx-uploader.com/upload',
-			// 	method: 'POST',
-			// 	data: { foo: 'bar' }
-			// };
-			// this.uploadInput.emit(event);
 		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
 			this.files.push(output.file);
 		} else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
@@ -69,15 +92,26 @@ export class ModalComponent {
 		} else if (output.type == 'done') {
 			if (output.file.responseStatus != 200) {
 				this.errors = output.file.response;
+			} else {
+				var obj = output.file.response;
+				if (this.modalsIndex == 0) {
+					this.service.changeBoard.emit(obj);
+				} else if (this.modalsIndex == 1) {
+					this.service.changeNotice.emit(obj);
+				} else {
+					this.service.changeGlob.emit(obj);
+				}
 			}
 		}
 	}
+
 	startUpload(): void {
 		const event: UploadInput = {
 			type: 'uploadAll',
-			url: '/upload/uploadNews',
+			url: this.modalsData.url,
 			method: 'POST',
 		};
+		
 		this.errors = '';
 		this.uploadInput.emit(event);
 	}
@@ -86,11 +120,9 @@ export class ModalComponent {
 		this.uploadInput.emit({ type: 'cancel', id: id });
 	}
 	
-	removeFile(id: string): void {
-		this.uploadInput.emit({ type: 'remove', id: id });
-	}
-	
-	removeAllFiles(): void {
-		this.uploadInput.emit({ type: 'removeAll' });
+	removeFile(f: UploadFile): void {
+		if (f.progress.status != UploadStatus.Uploading) {
+			this.uploadInput.emit({ type: 'remove', id: f.id });
+		};
 	}
 }

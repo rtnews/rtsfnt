@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { SmartTableService } from '../../../@core/data/smart-table.service';
+import { SmartTableService, ImageNews } from '../../../@core/data/smart-table.service';
 import { ModalComponent } from '../modal/modal.component';
 
 @Component({
@@ -41,27 +42,19 @@ export class NewsBoardComponent {
       position: 'right', // left|right
     },
     columns: {
-      id: {
-        title: '编号',
-        type: 'number'
-      },
-      name: {
-        title: '名称',
-        type: 'string'
-      },
-      file: {
+      FileName: {
         title: '文件名',
         type: 'string'
       },
-      title: {
+      Title: {
         title: '标题',
-        type: 'string',
+        type: 'string'
       },
-      text: {
+      Text: {
         title: '正文',
-        type: 'string',
+        type: 'string'
       },
-      time: {
+      Time: {
         title: '时间',
         type: 'string'
       }
@@ -71,16 +64,28 @@ export class NewsBoardComponent {
   
   source: LocalDataSource = new LocalDataSource();
   
-  constructor(private service: SmartTableService, private modalService: NgbModal) {
-    const data = this.service.getNewsBoardData();
-    this.source.load(data);
+  constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
+    this.loadImageNews();
+
+    service.changeBoard.subscribe((value:ImageNews)=>{
+      this.source.prepend(value);
+    })
   }
   
+  loadImageNews() {
+    this.http.get('/api/news/gethomelist').subscribe(res => {
+      (res as ImageNews[]).forEach(i => {
+        this.source.append(i);
+      });
+    });
+  }
+
   pushNews() {
     const activeModal = this.modalService.open(ModalComponent, {
       backdrop: 'static',
       container: 'nb-layout',
       size: 'lg',
     });
+    activeModal.componentInstance.setModalsData(0);
   }
 }
