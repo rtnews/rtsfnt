@@ -1,8 +1,8 @@
 <div>
 	<div class="modal-header">
 		<span>{{modalsData.name}}</span>
-		<button class="close" aria-label="Close" (click)="closeModal()">
-			<span aria-hidden="true">&times;</span>
+		<button class="close" aria-label="Close" (click)="closeModal()" [disabled]="isUploading()">
+			<span aria-hidden="true">{{closeOk}}</span>
 		</button>
 	</div>
 	<div class="modal-body">
@@ -14,7 +14,7 @@
 			  <div class="upload-item-top">
 				<span class="filename">{{ f.name }}</span>
 				<span class="progress-data">
-					状态: {{f.progress.status}} 速度: {{ f.progress.data.speedHuman }}	进度: {{ f.progress.data.percentage }}%}
+					状态: {{fileOk[f.progress.status]}} 速度: {{ f.progress.data.speedHuman }}	进度: {{ f.progress.data.percentage }}%
 				</span>
 				<span class="x" (click)="removeFile(f)">x</span>
 			  </div>

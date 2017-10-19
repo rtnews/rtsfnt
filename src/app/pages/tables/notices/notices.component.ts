@@ -8,25 +8,8 @@ import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'ngx-notices',
-  templateUrl: './notices.component.html',
-  styles: [`
-    nb-card {
-      transform: translate3d(0, 0, 0);
-    }
-	nb-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-  
-      .dropdown {
-        flex-basis: 30%;
-        min-width: 220px;
-      }
-    }
-    nb-card-body {
-      padding-bottom: 0;
-    }
-  `],
+  styleUrls: ['./notices.component.scss'],
+  templateUrl: './notices.component.html'
 })
 export class NoticesComponent {
 
@@ -44,7 +27,8 @@ export class NoticesComponent {
     columns: {
       FileName: {
         title: '文件名',
-        type: 'string'
+        type: 'string',
+        width: '100px'
       },
       Title: {
         title: '标题',
@@ -56,13 +40,15 @@ export class NoticesComponent {
       },
       Time: {
         title: '时间',
-        type: 'string'
+        type: 'string',
+        width: '200px'
       }
     },
     noDataMessage: '没有数据',
   };
   
   source: LocalDataSource = new LocalDataSource();
+  isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
     this.loadImageNews();
@@ -74,9 +60,13 @@ export class NoticesComponent {
   
   loadImageNews() {
     this.http.get('/api/news/getnoticelist').subscribe(res => {
+      
       (res as ImageNews[]).forEach(i => {
-        this.source.append(i);
+        this.source.prepend(i);
       });
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
     });
   }
   

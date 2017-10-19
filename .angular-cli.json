@@ -31,6 +31,7 @@
         "../node_modules/font-awesome/scss/font-awesome.scss",
         "../node_modules/nebular-icons/scss/nebular-icons.scss",
         "../node_modules/socicon/css/socicon.css",
+		"../node_modules/pure-css-loader/dist/css-loader.css",
         "./app/@theme/styles/styles.scss"
       ],
       "scripts": [

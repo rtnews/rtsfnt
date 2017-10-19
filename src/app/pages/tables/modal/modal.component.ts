@@ -34,6 +34,7 @@ const MODALSDATA:ModalsData[] = [
 export class ModalComponent {
 
 	fileOk:string[];
+	closeOk:string;
 	modalsIndex:number;
 	modalsData:ModalsData;
 	formData: FormData;
@@ -43,6 +44,7 @@ export class ModalComponent {
 	dragOver: boolean;
 	options: UploaderOptions;
 	errors:string;
+	uploading:boolean;
 
 	constructor(private activeModal: NgbActiveModal, private service: SmartTableService)
 	{
@@ -53,12 +55,13 @@ export class ModalComponent {
 			verbose: true
 		};
 		this.fileOk = [
-			'准备中',
-			'上传中(无法删除)',
-			'上传完成',
-			'取消'
+			'准备中.',
+			'上传中(不能删除).',
+			'上传完成.',
+			'已经取消.'
 		];
-
+		this.closeOk = '×';
+		this.uploading = false;
 		this.files = [];
 		this.errors = '';
 		this.uploadInput = new EventEmitter<UploadInput>();
@@ -79,6 +82,10 @@ export class ModalComponent {
 		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
 			this.files.push(output.file);
 		} else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+			if (!this.uploading) {
+				this.uploading = true;
+				this.closeOk = '⊙';
+			}
 			const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
 			this.files[index] = output.file;
 		} else if (output.type === 'removed') {
@@ -102,7 +109,26 @@ export class ModalComponent {
 					this.service.changeGlob.emit(obj);
 				}
 			}
+			let b = false;
+			for (var i = 0; i < this.files.length; i++) {
+				if (this.files[i].progress.status == UploadStatus.Uploading) {
+					b = true;
+					break;
+				}
+			}
+			if (this.uploading != b) {
+				this.uploading = b;
+				if (this.uploading) {
+					this.closeOk = '⊙';
+				} else {
+					this.closeOk = '×';
+				}
+			}
 		}
+	}
+
+	isUploading(): boolean {
+		return this.uploading;
 	}
 
 	startUpload(): void {
