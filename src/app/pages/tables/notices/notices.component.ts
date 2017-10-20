@@ -20,9 +20,13 @@ export class NoticesComponent {
       columnTitle: '删除',
       add: false,
       edit: false,
-      delete: false,
+      delete: true,
       custom: [],
       position: 'right', // left|right
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
     },
     columns: {
       FileName: {
@@ -60,7 +64,6 @@ export class NoticesComponent {
   
   loadImageNews() {
     this.http.get('/api/news/getnoticelist').subscribe(res => {
-      
       (res as ImageNews[]).forEach(i => {
         this.source.prepend(i);
       });
@@ -77,5 +80,21 @@ export class NoticesComponent {
       size: 'lg',
     });
     activeModal.componentInstance.setModalsData(1);
+  }
+  
+  onDeleteConfirm(event): void {
+    if (window.confirm('你确定要删除吗?')) {
+      this.http.post('/api/news/deleteNoticeNews', {
+        "Id": event.data.Id
+      }).subscribe(res => {
+        if (res) {
+          event.confirm.resolve();
+        } else {
+          event.confirm.reject();
+        }
+      });
+    } else {
+      event.confirm.reject();
+    }
   }
 }

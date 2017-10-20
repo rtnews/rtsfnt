@@ -55,10 +55,10 @@ export class ModalComponent {
 			verbose: true
 		};
 		this.fileOk = [
-			'准备中.',
+			'准备中. ',
 			'上传中(不能删除).',
-			'上传完成.',
-			'已经取消.'
+			'上传完成. ',
+			'已经取消. '
 		];
 		this.closeOk = '×';
 		this.uploading = false;

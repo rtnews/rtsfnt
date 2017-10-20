@@ -21,9 +21,13 @@ export class WnewsComponent {
       columnTitle: '删除',
       add: false,
       edit: false,
-      delete: false,
+      delete: true,
       custom: [],
       position: 'right', // left|right
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
     },
     columns: {
       FileName: {
@@ -77,5 +81,21 @@ export class WnewsComponent {
       size: 'lg',
     });
     activeModal.componentInstance.setModalsData(2);
+  }
+  
+  onDeleteConfirm(event): void {
+    if (window.confirm('你确定要删除吗?')) {
+      this.http.post('/api/news/deleteGlobNews', {
+        "Id": event.data.Id
+      }).subscribe(res => {
+        if (res) {
+          event.confirm.resolve();
+        } else {
+          event.confirm.reject();
+        }
+      });
+    } else {
+      event.confirm.reject();
+    }
   }
 }

@@ -8,12 +8,12 @@ import { AnalyticsService } from '../../../@core/utils/analytics.service';
   styleUrls: ['./theme-switcher.component.scss'],
   template: `
     <label class="theme-switch">
-      <span class="light">Light</span>
+      <span class="light">白色</span>
       <div class="switch">
         <input type="checkbox" [checked]="currentBoolTheme()" (change)="toggleTheme(theme.checked)" #theme>
         <span class="slider"></span>
       </div>
-      <span class="cosmic">Cosmic</span>
+      <span class="cosmic">蓝色</span>
     </label>
   `,
 })

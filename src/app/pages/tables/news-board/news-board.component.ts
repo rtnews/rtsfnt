@@ -11,6 +11,7 @@ import { ModalComponent } from '../modal/modal.component';
   styleUrls: ['./news-board.component.scss'],
   templateUrl: './news-board.component.html'
 })
+
 export class NewsBoardComponent {
 
   settings = {
@@ -20,9 +21,13 @@ export class NewsBoardComponent {
       columnTitle: '删除',
       add: false,
       edit: false,
-      delete: false,
+      delete: true,
       custom: [],
       position: 'right', // left|right
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
     },
     columns: {
       FileName: {
@@ -76,5 +81,21 @@ export class NewsBoardComponent {
       size: 'lg',
     });
     activeModal.componentInstance.setModalsData(0);
+  }
+
+  onDeleteConfirm(event): void {
+    if (window.confirm('你确定要删除吗?')) {
+      this.http.post('/api/news/deleteHomeNews', {
+        "Id": event.data.Id
+      }).subscribe(res => {
+        if (res) {
+          event.confirm.resolve();
+        } else {
+          event.confirm.reject();
+        }
+      });
+    } else {
+      event.confirm.reject();
+    }
   }
 }

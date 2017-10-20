@@ -29,7 +29,7 @@ import 'rxjs/add/operator/delay';
                    responsive
                    [right]="sidebar.id === 'right'">
         <nb-sidebar-header>
-          <a href="https://github.com/akveo/nebular" target="_blank" class="btn btn-hero-success main-btn">
+          <a href="https://rtnews.com" target="_blank" class="btn btn-hero-success main-btn">
             <i class="ion ion-social-github"></i> <span>联系我们</span>
           </a>
         </nb-sidebar-header>

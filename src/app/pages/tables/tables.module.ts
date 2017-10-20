@@ -16,7 +16,7 @@ import { ModalComponent } from './modal/modal.component';
   ],
   declarations: [
     ...routedComponents,
-	ModalComponent,
+    ModalComponent,
   ],
   providers: [
     SmartTableService,
