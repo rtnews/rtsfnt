@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { UserService } from './users.service';
 import { ElectricityService } from './electricity.service';
 import { StateService } from './state.service';
-import { SmartTableService } from './smart-table.service';
+import { NewsService } from './news.service';
 import { PlayerService } from './player.service';
 import { AuthService } from './auth.service';
 
@@ -12,7 +12,7 @@ const SERVICES = [
   UserService,
   ElectricityService,
   StateService,
-  SmartTableService,
+  NewsService,
   PlayerService,
   AuthService,
 ];

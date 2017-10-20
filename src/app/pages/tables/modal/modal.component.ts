@@ -2,7 +2,7 @@ import { Component,EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions, UploadStatus } from 'ngx-uploader';
 import { ModalsData } from './modal.data'
-import { SmartTableService } from '../../../@core/data/smart-table.service';
+import { NewsService } from '../../../@core/data/news.service';
 
 interface FormData {
   concurrency: number;
@@ -46,7 +46,7 @@ export class ModalComponent {
 	errors:string;
 	uploading:boolean;
 
-	constructor(private activeModal: NgbActiveModal, private service: SmartTableService)
+	constructor(private activeModal: NgbActiveModal, private service: NewsService)
 	{
 		this.options = { concurrency: 1 };
 		this.formData = {
@@ -102,11 +102,11 @@ export class ModalComponent {
 			} else {
 				var obj = output.file.response;
 				if (this.modalsIndex == 0) {
-					this.service.changeBoard.emit(obj);
+					this.service.changeHome.emit(obj);
 				} else if (this.modalsIndex == 1) {
 					this.service.changeNotice.emit(obj);
 				} else {
-					this.service.changeGlob.emit(obj);
+					this.service.changeGlobal.emit(obj);
 				}
 			}
 			let b = false;

@@ -14,14 +14,14 @@ export class ImageNews {
 }
 
 @Injectable()
-export class SmartTableService {
-  changeBoard: EventEmitter<ImageNews>;
+export class NewsService {
+  changeHome: EventEmitter<ImageNews>;
   changeNotice: EventEmitter<ImageNews>;
-  changeGlob: EventEmitter<ImageNews>;
+  changeGlobal: EventEmitter<ImageNews>;
   
   constructor(){
-    this.changeBoard = new EventEmitter();
+    this.changeHome = new EventEmitter();
     this.changeNotice = new EventEmitter();
-    this.changeGlob = new EventEmitter();
+    this.changeGlobal = new EventEmitter();
   }
 }

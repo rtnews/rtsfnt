@@ -3,16 +3,16 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { SmartTableService, ImageNews } from '../../../@core/data/smart-table.service';
+import { NewsService, ImageNews } from '../../../@core/data/news.service';
 import { ModalComponent } from '../modal/modal.component';
 
 @Component({
-  selector: 'ngx-newsboard',
-  styleUrls: ['./news-board.component.scss'],
-  templateUrl: './news-board.component.html'
+  selector: 'ngx-home',
+  styleUrls: ['./home.component.scss'],
+  templateUrl: './home.component.html'
 })
 
-export class NewsBoardComponent {
+export class HomeComponent {
 
   settings = {
     hideHeader: false,
@@ -55,10 +55,10 @@ export class NewsBoardComponent {
   source: LocalDataSource = new LocalDataSource();
   isLoading:boolean = true;
   
-  constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
+  constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
 
-    service.changeBoard.subscribe((value:ImageNews)=>{
+    service.changeHome.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     })
   }

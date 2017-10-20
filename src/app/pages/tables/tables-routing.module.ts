@@ -2,25 +2,25 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { TablesComponent } from './tables.component';
-import { NewsBoardComponent } from './news-board/news-board.component';
-import { NoticesComponent } from './notices/notices.component';
-import { WnewsComponent } from './wnews/wnews.component';
+import { HomeComponent } from './home/home.component';
+import { NoticeComponent } from './notice/notice.component';
+import { GlobalComponent } from './global/global.component';
 
 const routes: Routes = [{
   path: '',
   component: TablesComponent,
   children: [{
-    path: 'newsboard',
-    component: NewsBoardComponent
+    path: 'home',
+    component: HomeComponent
   },{
-    path: 'notices',
-    component: NoticesComponent
+    path: 'notice',
+    component: NoticeComponent
   },{
-    path: 'wnews',
-    component: WnewsComponent
+    path: 'global',
+    component: GlobalComponent
   },{
     path: '',
-    redirectTo: 'newsboard',
+    redirectTo: 'home',
     pathMatch: 'full',
   }],
 }];
@@ -33,7 +33,7 @@ export class TablesRoutingModule { }
 
 export const routedComponents = [
   TablesComponent,
-  NewsBoardComponent,
-  NoticesComponent,
-  WnewsComponent
+  HomeComponent,
+  NoticeComponent,
+  GlobalComponent
 ];

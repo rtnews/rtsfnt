@@ -3,15 +3,16 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { SmartTableService, ImageNews } from '../../../@core/data/smart-table.service';
+import { NewsService, ImageNews } from '../../../@core/data/news.service';
 import { ModalComponent } from '../modal/modal.component';
 
 @Component({
-  selector: 'ngx-notices',
-  styleUrls: ['./notices.component.scss'],
-  templateUrl: './notices.component.html'
+  selector: 'ngx-wnews',
+  styleUrls: ['./global.component.scss'],
+  templateUrl: './global.component.html'
 })
-export class NoticesComponent {
+
+export class GlobalComponent {
 
   settings = {
     hideHeader: false,
@@ -54,16 +55,16 @@ export class NoticesComponent {
   source: LocalDataSource = new LocalDataSource();
   isLoading:boolean = true;
   
-  constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
+  constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
     
-    service.changeNotice.subscribe((value:ImageNews)=>{
+    service.changeGlobal.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     })
   }
   
   loadImageNews() {
-    this.http.get('/api/news/getnoticelist').subscribe(res => {
+    this.http.get('/api/news/getgloblist').subscribe(res => {
       (res as ImageNews[]).forEach(i => {
         this.source.prepend(i);
       });
@@ -79,12 +80,12 @@ export class NoticesComponent {
       container: 'nb-layout',
       size: 'lg',
     });
-    activeModal.componentInstance.setModalsData(1);
+    activeModal.componentInstance.setModalsData(2);
   }
   
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
-      this.http.post('/api/news/deleteNoticeNews', {
+      this.http.post('/api/news/deleteGlobNews', {
         "Id": event.data.Id
       }).subscribe(res => {
         if (res) {

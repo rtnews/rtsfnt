@@ -7,12 +7,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: '公安要闻',
-        link: '/pages/tables/newsboard',
+        link: '/pages/tables/home',
         home: true
       },
       {
         title: '全局动态',
-        link: '/pages/tables/wnews'
+        link: '/pages/tables/global'
       }
     ]
   },
@@ -23,7 +23,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: '今日值班',
     icon: 'nb-compose',
-    link: '/pages/table/onduty'
+    link: '/pages/table/duty'
   },
   {
     title: '机关工作',
@@ -31,11 +31,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: '通知通报',
-        link: '/pages/tables/notices'
+        link: '/pages/tables/notice'
       },
       {
         title: '部门值班',
-        link: '/pages/table/dutypart'
+        link: '/pages/table/dpart'
       }
     ]
   },

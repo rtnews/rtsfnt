@@ -3,16 +3,15 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { SmartTableService, ImageNews } from '../../../@core/data/smart-table.service';
+import { NewsService, ImageNews } from '../../../@core/data/news.service';
 import { ModalComponent } from '../modal/modal.component';
 
 @Component({
-  selector: 'ngx-wnews',
-  styleUrls: ['./wnews.component.scss'],
-  templateUrl: './wnews.component.html'
+  selector: 'ngx-notices',
+  styleUrls: ['./notice.component.scss'],
+  templateUrl: './notice.component.html'
 })
-
-export class WnewsComponent {
+export class NoticeComponent {
 
   settings = {
     hideHeader: false,
@@ -55,16 +54,16 @@ export class WnewsComponent {
   source: LocalDataSource = new LocalDataSource();
   isLoading:boolean = true;
   
-  constructor(private http: HttpClient, private service: SmartTableService, private modalService: NgbModal) {
+  constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
     
-    service.changeGlob.subscribe((value:ImageNews)=>{
+    service.changeNotice.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     })
   }
   
   loadImageNews() {
-    this.http.get('/api/news/getgloblist').subscribe(res => {
+    this.http.get('/api/news/getnoticelist').subscribe(res => {
       (res as ImageNews[]).forEach(i => {
         this.source.prepend(i);
       });
@@ -80,12 +79,12 @@ export class WnewsComponent {
       container: 'nb-layout',
       size: 'lg',
     });
-    activeModal.componentInstance.setModalsData(2);
+    activeModal.componentInstance.setModalsData(1);
   }
   
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
-      this.http.post('/api/news/deleteGlobNews', {
+      this.http.post('/api/news/deleteNoticeNews', {
         "Id": event.data.Id
       }).subscribe(res => {
         if (res) {

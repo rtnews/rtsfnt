@@ -4,7 +4,7 @@ import { NgUploaderModule } from 'ngx-uploader';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { TablesRoutingModule, routedComponents } from './tables-routing.module';
-import { SmartTableService } from '../../@core/data/smart-table.service';
+import { NewsService } from '../../@core/data/news.service';
 import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { ModalComponent } from './modal/modal.component';
     ModalComponent,
   ],
   providers: [
-    SmartTableService,
+    NewsService,
   ],
   entryComponents: [
     ModalComponent,
