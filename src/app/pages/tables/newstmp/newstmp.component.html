@@ -1,0 +1,14 @@
+<div *ngIf="isLoading" class="loader loader-ball is-active" data-shadow>
+  <div class="loaddiv">正在加载所有模板...</div>
+</div>
+<nb-card>
+  <nb-card-header>
+    <span>新闻模板</span>
+    <button class="btn btn-primary btn-sm" (click)="pushNewsTmp()">添 加</button>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+	</ng2-smart-table>
+  </nb-card-body>
+</nb-card>

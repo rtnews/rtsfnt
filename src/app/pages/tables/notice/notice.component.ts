@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { NewsService, ImageNews } from '../../../@core/data/news.service';
-import { ModalComponent } from '../modal/modal.component';
+import { UploadComponent } from '../upload/upload.component';
 
 @Component({
-  selector: 'ngx-notices',
+  selector: 'ngx-notice',
   styleUrls: ['./notice.component.scss'],
   templateUrl: './notice.component.html'
 })
@@ -59,7 +59,7 @@ export class NoticeComponent {
     
     service.changeNotice.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
-    })
+    });
   }
   
   loadImageNews() {
@@ -74,12 +74,12 @@ export class NoticeComponent {
   }
   
   pushNews() {
-    const activeModal = this.modalService.open(ModalComponent, {
+    const activeModal = this.modalService.open(UploadComponent, {
       backdrop: 'static',
       container: 'nb-layout',
       size: 'lg',
     });
-    activeModal.componentInstance.setModalsData(1);
+    activeModal.componentInstance.setUploadData(1);
   }
   
   onDeleteConfirm(event): void {

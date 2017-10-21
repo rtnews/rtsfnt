@@ -1,7 +1,7 @@
 import { Component,EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions, UploadStatus } from 'ngx-uploader';
-import { ModalsData } from './modal.data'
+import { UploadData } from './upload.data';
 import { NewsService } from '../../../@core/data/news.service';
 
 interface FormData {
@@ -10,7 +10,7 @@ interface FormData {
   verbose: boolean;
 }
 
-const MODALSDATA:ModalsData[] = [
+const UPLOADDATA:UploadData[] = [
 	{
 		url:'/Upload/UploadHomeNews',
 		name:'公安要闻'
@@ -23,20 +23,24 @@ const MODALSDATA:ModalsData[] = [
 		url:'/Upload/UploadGlobalNews',
 		name:'全局动态'
 	},
+	{
+		url:'/Upload/UploadNewsTmp',
+		name:'新闻模板'
+	},
 ];
 
 @Component({
-  selector: 'ngx-modal',
-  styleUrls: ['./modal.component.scss'],
-  templateUrl: './modal.component.html'
+  selector: 'ngx-upload',
+  styleUrls: ['./upload.component.scss'],
+  templateUrl: './upload.component.html'
 })
 
-export class ModalComponent {
+export class UploadComponent {
 
 	fileOk:string[];
 	closeOk:string;
-	modalsIndex:number;
-	modalsData:ModalsData;
+	uploadIndex:number;
+	uploadData:UploadData;
 	formData: FormData;
 	files: UploadFile[];
 	uploadInput: EventEmitter<UploadInput>;
@@ -72,12 +76,13 @@ export class ModalComponent {
 		this.activeModal.close();
 	}
 
-	setModalsData(index:number): void {
-		this.modalsData = MODALSDATA[index];
-		this.modalsIndex = index;
+	setUploadData(index:number): void {
+		this.uploadData = UPLOADDATA[index];
+		this.uploadIndex = index;
 	}
 	
 	onUploadOutput(output: UploadOutput): void {
+		console.error(output.type);
 		if (output.type === 'allAddedToQueue') {
 		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
 			this.files.push(output.file);
@@ -86,6 +91,7 @@ export class ModalComponent {
 				this.uploading = true;
 				this.closeOk = '⊙';
 			}
+			console.error("output.type");
 			const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
 			this.files[index] = output.file;
 		} else if (output.type === 'removed') {
@@ -101,12 +107,18 @@ export class ModalComponent {
 				this.errors = output.file.response;
 			} else {
 				var obj = output.file.response;
-				if (this.modalsIndex == 0) {
+				if (this.uploadIndex == 0) {
+					console.error("changeHome");
 					this.service.changeHome.emit(obj);
-				} else if (this.modalsIndex == 1) {
+				} else if (this.uploadIndex == 1) {
+					console.error("changeHome");
 					this.service.changeNotice.emit(obj);
-				} else {
+				} else if (this.uploadIndex == 2) {
+					console.error("changeHome");
 					this.service.changeGlobal.emit(obj);
+				} else {
+					console.error("changeHome");
+					this.service.changeNewsTmp.emit(obj);
 				}
 			}
 			let b = false;
@@ -134,7 +146,7 @@ export class ModalComponent {
 	startUpload(): void {
 		const event: UploadInput = {
 			type: 'uploadAll',
-			url: this.modalsData.url,
+			url: this.uploadData.url,
 			method: 'POST',
 		};
 		

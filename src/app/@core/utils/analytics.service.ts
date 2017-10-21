@@ -11,7 +11,7 @@ export class AnalyticsService {
   private _enabled: boolean;
 
   constructor(private _location: Location, private _router: Router) {
-    this._enabled = window.location.href.indexOf('akveo.com') >= 0;
+    this._enabled = false;
   }
 
   trackPageViews() {

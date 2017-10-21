@@ -1,4 +1,4 @@
-export class ModalsData {
+export class UploadData {
     url:string;
     name:string;
 }

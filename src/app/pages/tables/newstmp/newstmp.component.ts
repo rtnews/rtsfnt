@@ -1,19 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 
-import { NewsService, ImageNews } from '../../../@core/data/news.service';
+import { NewsService, NewsTmp } from '../../../@core/data/news.service';
 import { UploadComponent } from '../upload/upload.component';
 
 @Component({
-  selector: 'ngx-global',
-  styleUrls: ['./global.component.scss'],
-  templateUrl: './global.component.html'
+  selector: 'app-newstmp',
+  templateUrl: './newstmp.component.html',
+  styleUrls: ['./newstmp.component.scss']
 })
-
-export class GlobalComponent {
-
+export class NewsTmpComponent implements OnInit {
+  
   settings = {
     hideHeader: false,
     hideSubHeader: true,
@@ -32,15 +31,6 @@ export class GlobalComponent {
     columns: {
       FileName: {
         title: '文件名',
-        type: 'string',
-        width: '100px'
-      },
-      Title: {
-        title: '标题',
-        type: 'string'
-      },
-      Text: {
-        title: '正文',
         type: 'string'
       },
       Time: {
@@ -56,16 +46,20 @@ export class GlobalComponent {
   isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
-    this.loadImageNews();
+    this.loadNewsTmp();
     
-    service.changeGlobal.subscribe((value:ImageNews)=>{
+    service.changeNewsTmp.subscribe((value:NewsTmp)=>{
       this.source.prepend(value);
     });
+   }
+
+  ngOnInit() {
   }
-  
-  loadImageNews() {
-    this.http.get('/api/news/getgloblist').subscribe(res => {
-      (res as ImageNews[]).forEach(i => {
+
+  loadNewsTmp() {
+    console.error("loadNewsTmp");
+    this.http.get('/api/template/getnewstmplist').subscribe(res => {
+      (res as NewsTmp[]).forEach(i => {
         this.source.prepend(i);
       });
       setTimeout(() => {
@@ -74,18 +68,18 @@ export class GlobalComponent {
     });
   }
   
-  pushNews() {
+  pushNewsTmp() {
     const activeModal = this.modalService.open(UploadComponent, {
       backdrop: 'static',
       container: 'nb-layout',
       size: 'lg',
     });
-    activeModal.componentInstance.setUploadData(2);
+    activeModal.componentInstance.setUploadData(3);
   }
   
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
-      this.http.post('/api/news/deleteGlobNews', {
+      this.http.post('/api/template/deleteNewsTmp', {
         "Id": event.data.Id
       }).subscribe(res => {
         if (res) {

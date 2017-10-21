@@ -1,0 +1,23 @@
+<div>
+	<div class="modal-header">
+		<span>添加部门</span>
+		<button class="close" aria-label="Close" (click)="closeModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+      <div class="form-group">
+        <label for="input-Identifier" class="sr-only">部门编号</label>
+        <input name="Identifier" [(ngModel)]="depart.Identifier" id="input-Identifier"
+           class="form-control" placeholder="部门编号" autofocus>
+      </div>
+      <div class="form-group">
+          <label for="input-name" class="sr-only">部门名称</label>
+          <input name="name" [(ngModel)]="depart.Name" id="input-name"
+            class="form-control" placeholder="部门名称">
+      </div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-md btn-primary btn-sm" (click)="addDepart()">添 加</button>
+	</div>
+</div>

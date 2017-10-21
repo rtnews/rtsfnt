@@ -13,15 +13,38 @@ export class ImageNews {
 
 }
 
+export class NewsTmp {
+  
+    Id:string;
+    Name:string;
+    FileName:string;
+    Time:string;
+    Count:number;
+  
+  }
+
+  export class Depart {
+    
+      Id:string;
+      Identifier:string;
+      Name:string;
+    
+    }
+
 @Injectable()
 export class NewsService {
   changeHome: EventEmitter<ImageNews>;
   changeNotice: EventEmitter<ImageNews>;
   changeGlobal: EventEmitter<ImageNews>;
+  changeNewsTmp: EventEmitter<NewsTmp>;
+  changeDepart: EventEmitter<Depart>;
   
   constructor(){
     this.changeHome = new EventEmitter();
     this.changeNotice = new EventEmitter();
     this.changeGlobal = new EventEmitter();
+    this.changeNewsTmp = new EventEmitter();
+    this.changeDepart = new EventEmitter();
   }
+  
 }

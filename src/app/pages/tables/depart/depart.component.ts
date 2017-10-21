@@ -1,19 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 
-import { NewsService, ImageNews } from '../../../@core/data/news.service';
-import { UploadComponent } from '../upload/upload.component';
+import { NewsService, Depart } from '../../../@core/data/news.service';
+import { MDepartComponent } from '../mdepart/mdepart.component';
 
 @Component({
-  selector: 'ngx-global',
-  styleUrls: ['./global.component.scss'],
-  templateUrl: './global.component.html'
+  selector: 'app-depart',
+  templateUrl: './depart.component.html',
+  styleUrls: ['./depart.component.scss']
 })
-
-export class GlobalComponent {
-
+export class DepartComponent implements OnInit {
+  
   settings = {
     hideHeader: false,
     hideSubHeader: true,
@@ -30,24 +29,14 @@ export class GlobalComponent {
       confirmDelete: true,
     },
     columns: {
-      FileName: {
-        title: '文件名',
-        type: 'string',
-        width: '100px'
-      },
-      Title: {
-        title: '标题',
+      Identifier: {
+        title: '部门编号',
         type: 'string'
       },
-      Text: {
-        title: '正文',
+      Name: {
+        title: '部门名称',
         type: 'string'
       },
-      Time: {
-        title: '时间',
-        type: 'string',
-        width: '200px'
-      }
     },
     noDataMessage: '没有数据',
   };
@@ -56,16 +45,19 @@ export class GlobalComponent {
   isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
-    this.loadImageNews();
+    this.loadDeparts();
     
-    service.changeGlobal.subscribe((value:ImageNews)=>{
+    service.changeNotice.subscribe((value:Depart)=>{
       this.source.prepend(value);
     });
   }
   
-  loadImageNews() {
-    this.http.get('/api/news/getgloblist').subscribe(res => {
-      (res as ImageNews[]).forEach(i => {
+  ngOnInit() {
+  }
+  
+  loadDeparts() {
+    this.http.get('/api/depart/getdepartlist').subscribe(res => {
+      (res as Depart[]).forEach(i => {
         this.source.prepend(i);
       });
       setTimeout(() => {
@@ -74,18 +66,17 @@ export class GlobalComponent {
     });
   }
   
-  pushNews() {
-    const activeModal = this.modalService.open(UploadComponent, {
+  pushDepart() {
+    this.modalService.open(MDepartComponent, {
       backdrop: 'static',
       container: 'nb-layout',
       size: 'lg',
     });
-    activeModal.componentInstance.setUploadData(2);
   }
   
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
-      this.http.post('/api/news/deleteGlobNews', {
+      this.http.post('/api/depart/deleteDepart', {
         "Id": event.data.Id
       }).subscribe(res => {
         if (res) {
