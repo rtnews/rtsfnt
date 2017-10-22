@@ -82,7 +82,6 @@ export class UploadComponent {
 	}
 	
 	onUploadOutput(output: UploadOutput): void {
-		console.error(output.type);
 		if (output.type === 'allAddedToQueue') {
 		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
 			this.files.push(output.file);
@@ -107,16 +106,12 @@ export class UploadComponent {
 			} else {
 				var obj = output.file.response;
 				if (this.uploadIndex == 0) {
-					console.error("changeHome");
 					this.service.changeHome.emit(obj);
 				} else if (this.uploadIndex == 1) {
-					console.error("changeHome");
 					this.service.changeNotice.emit(obj);
 				} else if (this.uploadIndex == 2) {
-					console.error("changeHome");
 					this.service.changeGlobal.emit(obj);
 				} else {
-					console.error("changeHome");
 					this.service.changeNewsTmp.emit(obj);
 				}
 			}
