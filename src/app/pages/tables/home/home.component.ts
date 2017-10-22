@@ -86,7 +86,8 @@ export class HomeComponent {
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
       this.http.post('/api/news/deleteHomeNews', {
-        "Id": event.data.Id
+        "Id": event.data.Id,
+        "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
           event.confirm.resolve();

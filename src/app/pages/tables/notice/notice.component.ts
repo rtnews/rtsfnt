@@ -85,7 +85,8 @@ export class NoticeComponent {
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
       this.http.post('/api/news/deleteNoticeNews', {
-        "Id": event.data.Id
+        "Id": event.data.Id,
+        "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
           event.confirm.resolve();
