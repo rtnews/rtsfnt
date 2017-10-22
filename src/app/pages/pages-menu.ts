@@ -23,7 +23,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: '今日值班',
     icon: 'nb-compose',
-    link: '/pages/table/onduty'
+    link: '/pages/tables/onduty'
   },
   {
     title: '机关工作',
@@ -35,7 +35,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: '部门值班',
-        link: '/pages/table/dpart'
+        link: '/pages/tables/dpart'
       }
     ]
   },

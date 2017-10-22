@@ -31,8 +31,7 @@ export class NoticeComponent {
     columns: {
       FileName: {
         title: '文件名',
-        type: 'string',
-        width: '100px'
+        type: 'string'
       },
       Title: {
         title: '标题',
@@ -44,8 +43,7 @@ export class NoticeComponent {
       },
       Time: {
         title: '时间',
-        type: 'string',
-        width: '200px'
+        type: 'string'
       }
     },
     noDataMessage: '没有数据',

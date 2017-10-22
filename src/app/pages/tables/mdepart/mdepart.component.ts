@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NewsService, Depart } from '../../../@core/data/news.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClient } from '@angular/common/http';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'ngx-mdepart',
@@ -9,9 +11,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class MDepartComponent implements OnInit {
 
-  depart: Depart;
-
-  constructor(private activeModal: NgbActiveModal) {
+  identifier:string='';
+  name:string='';
+  
+  constructor(private activeModal: NgbActiveModal, private http: HttpClient,
+    private service: NewsService) {
 
    }
 
@@ -23,6 +27,15 @@ export class MDepartComponent implements OnInit {
   }
   
   addDepart(): void {
+    console.error(this.identifier);
+    console.error(this.name);
+    this.http.post('/api/depart/adddepart', {
+      "Identifier": this.identifier,
+      "Name": this.name
+    }).subscribe(res => {
+      this.service.changeDepart.emit(res as Depart);
+      this.activeModal.close();
+    });
   }
-  
+
 }

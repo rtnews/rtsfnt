@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgUploaderModule } from 'ngx-uploader';
 
@@ -12,6 +13,7 @@ import { MClerksComponent } from './mclerks/mclerks.component';
 @NgModule({
   imports: [
     ThemeModule,
+    FormsModule,
     TablesRoutingModule,
     Ng2SmartTableModule,
     NgUploaderModule

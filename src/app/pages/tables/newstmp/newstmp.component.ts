@@ -35,8 +35,7 @@ export class NewsTmpComponent implements OnInit {
       },
       Time: {
         title: '时间',
-        type: 'string',
-        width: '200px'
+        type: 'string'
       }
     },
     noDataMessage: '没有数据',

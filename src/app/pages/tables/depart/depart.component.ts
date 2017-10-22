@@ -47,7 +47,7 @@ export class DepartComponent implements OnInit {
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadDeparts();
     
-    service.changeNotice.subscribe((value:Depart)=>{
+    service.changeDepart.subscribe((value:Depart)=>{
       this.source.prepend(value);
     });
   }
@@ -69,15 +69,15 @@ export class DepartComponent implements OnInit {
   pushDepart() {
     this.modalService.open(MDepartComponent, {
       backdrop: 'static',
-      container: 'nb-layout',
-      size: 'lg',
+      container: 'nb-layout'
     });
   }
   
   onDeleteConfirm(event): void {
     if (window.confirm('你确定要删除吗?')) {
       this.http.post('/api/depart/deleteDepart', {
-        "Id": event.data.Id
+        "Id": event.data.Id,
+        "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
           event.confirm.resolve();

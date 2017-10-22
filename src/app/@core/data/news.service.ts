@@ -1,7 +1,6 @@
 import { Injectable,EventEmitter } from '@angular/core';
 
 export class ImageNews {
-
   Id:string;
   Name:string;
   FileName:string;
@@ -10,26 +9,21 @@ export class ImageNews {
   Time:string;
   Read:number;
   Count:number;
-
 }
 
 export class NewsTmp {
-  
     Id:string;
     Name:string;
     FileName:string;
     Time:string;
     Count:number;
-  
-  }
+}
 
-  export class Depart {
-    
-      Id:string;
-      Identifier:string;
-      Name:string;
-    
-    }
+export class Depart {
+  Id:string;
+  Identifier:string;
+  Name:string;
+}
 
 @Injectable()
 export class NewsService {
