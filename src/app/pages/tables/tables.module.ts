@@ -6,13 +6,8 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { TablesRoutingModule, routedComponents } from './tables-routing.module';
 import { NewsService } from '../../@core/data/news.service';
 import { UploadComponent } from './upload/upload.component';
-import { DepartComponent } from './depart/depart.component';
-import { ClerksComponent } from './clerks/clerks.component';
-import { DpartComponent } from './dpart/dpart.component';
-import { NewsTmpComponent } from './newstmp/newstmp.component';
 import { MDepartComponent } from './mdepart/mdepart.component';
 import { MClerksComponent } from './mclerks/mclerks.component';
-import { OndutyComponent } from './onduty/onduty.component';
 
 @NgModule({
   imports: [
@@ -24,19 +19,16 @@ import { OndutyComponent } from './onduty/onduty.component';
   declarations: [
     ...routedComponents,
     UploadComponent,
-    DepartComponent,
-    ClerksComponent,
-    DpartComponent,
-    NewsTmpComponent,
     MDepartComponent,
-    MClerksComponent,
-    OndutyComponent
+    MClerksComponent
 ],
   providers: [
     NewsService,
   ],
   entryComponents: [
     UploadComponent,
+    MDepartComponent,
+    MClerksComponent
   ],
 })
 export class TablesModule { }

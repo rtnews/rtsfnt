@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-clerks',
+  selector: 'ngx-clerks',
   templateUrl: './clerks.component.html',
   styleUrls: ['./clerks.component.scss']
 })

@@ -7,7 +7,7 @@ import { NewsService, NewsTmp } from '../../../@core/data/news.service';
 import { UploadComponent } from '../upload/upload.component';
 
 @Component({
-  selector: 'app-newstmp',
+  selector: 'ngx-newstmp',
   templateUrl: './newstmp.component.html',
   styleUrls: ['./newstmp.component.scss']
 })

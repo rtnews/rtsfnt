@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-dpart',
+  selector: 'ngx-dpart',
   templateUrl: './dpart.component.html',
   styleUrls: ['./dpart.component.scss']
 })

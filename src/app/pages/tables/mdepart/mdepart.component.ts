@@ -3,7 +3,7 @@ import { NewsService, Depart } from '../../../@core/data/news.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-mdepart',
+  selector: 'ngx-mdepart',
   templateUrl: './mdepart.component.html',
   styleUrls: ['./mdepart.component.scss']
 })

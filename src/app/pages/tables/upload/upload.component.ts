@@ -91,7 +91,6 @@ export class UploadComponent {
 				this.uploading = true;
 				this.closeOk = '⊙';
 			}
-			console.error("output.type");
 			const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
 			this.files[index] = output.file;
 		} else if (output.type === 'removed') {

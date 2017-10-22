@@ -7,7 +7,7 @@ import { NewsService, Depart } from '../../../@core/data/news.service';
 import { MDepartComponent } from '../mdepart/mdepart.component';
 
 @Component({
-  selector: 'app-depart',
+  selector: 'ngx-depart',
   templateUrl: './depart.component.html',
   styleUrls: ['./depart.component.scss']
 })

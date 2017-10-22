@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-onduty',
+  selector: 'ngx-onduty',
   templateUrl: './onduty.component.html',
   styleUrls: ['./onduty.component.scss']
 })
