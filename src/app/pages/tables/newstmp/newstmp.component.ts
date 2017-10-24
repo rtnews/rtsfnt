@@ -63,7 +63,7 @@ export class NewsTmpComponent implements OnInit {
       });
       setTimeout(() => {
         this.isLoading = false;
-      }, 1000);
+      }, 500);
     });
   }
   

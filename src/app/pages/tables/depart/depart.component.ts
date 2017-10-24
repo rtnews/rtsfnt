@@ -44,26 +44,22 @@ export class DepartComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   isLoading:boolean = true;
   
-  constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
-    this.loadDeparts();
-    
-    service.changeDepart.subscribe((value:Depart)=>{
-      this.source.prepend(value);
-    });
+  constructor(private http: HttpClient, private service: NewsService,
+     private modalService: NgbModal) {
+      this.service.changeDepart.subscribe((value:Depart)=>{
+        this.source.prepend(value);
+      });
+      const departs = this.service.getDeparts();
+      if (departs.length > 0) {
+        this.source.load(departs);
+      }
+      
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 500);
   }
   
   ngOnInit() {
-  }
-  
-  loadDeparts() {
-    this.http.get('/api/depart/getdepartlist').subscribe(res => {
-      (res as Depart[]).forEach(i => {
-        this.source.prepend(i);
-      });
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    });
   }
   
   pushDepart() {
@@ -80,6 +76,8 @@ export class DepartComponent implements OnInit {
         "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
+          this.service.deleteDepart(event.data.Id);
+          
           event.confirm.resolve();
         } else {
           event.confirm.reject();

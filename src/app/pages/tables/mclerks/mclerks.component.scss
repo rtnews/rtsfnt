@@ -1,0 +1,36 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+
+    .track-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        flex: 1;
+
+        .cover {
+          border-radius: nb-theme(radius) / 2;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          width: 10rem;
+          height: 13rem;
+        }
+    }
+    
+    .upload-button {
+        display: block;
+        float: left;
+        text-decoration: underline;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        margin-left: 4px;
+
+        input {
+          display: none;
+        }
+    }
+    
+}

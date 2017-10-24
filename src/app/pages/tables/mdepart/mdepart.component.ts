@@ -27,8 +27,6 @@ export class MDepartComponent implements OnInit {
   }
   
   addDepart(): void {
-    console.error(this.identifier);
-    console.error(this.name);
     this.http.post('/api/depart/adddepart', {
       "Identifier": this.identifier,
       "Name": this.name

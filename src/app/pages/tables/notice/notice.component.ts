@@ -67,7 +67,7 @@ export class NoticeComponent {
       });
       setTimeout(() => {
         this.isLoading = false;
-      }, 1000);
+      }, 500);
     });
   }
   
