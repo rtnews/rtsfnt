@@ -1,33 +1,55 @@
 <div>
   <div class="modal-header">
     <span>添加部门人员</span>
-    <button class="close" aria-label="Close" (click)="closeModal()">
-      <span aria-hidden="true">&times;</span>
+		<button class="close" aria-label="Close" (click)="closeModal()" [disabled]="isUploading()">
+      <span aria-hidden="true">{{closeOk}}</span>
     </button>
   </div>
   <div class="modal-body">
     <div class="form-group">
-    </div>
-    <div class="form-group">
-      <div ngbDropdown>
-        <button class="btn btn-primary" type="button" ngbDropdownToggle>
-          {{ depart.Name }}
-        </button>
-        <ul class="dropdown-menu">
-          <li class="dropdown-item" *ngFor="let v of departs" (click)="this.depart=v">{{ v.Name }}</li>
-        </ul>
+      <div class="track-info">
+        <div class="cover" [ngSwitch]="select" >
+          <div class="drop-container" *ngSwitchCase="false">
+            <label class="upload-button">
+              没有照片
+            </label>
+          </div>
+          <div class="selected-status-wrapper match-parent" *ngSwitchCase="true">
+              <img class="imgclass" [src]="imageThumbnail">
+          </div>
+        </div>
+        <div class="img-ul-file-upload img-ul-hr-inline-group">
+            <label class="img-ul-upload img-ul-button">
+              <span>选择照片</span>
+              <input type="file"
+                ngFileSelect [options]="options"
+                (uploadOutput)="onUploadOutput($event)" 
+                [uploadInput]="uploadInput"
+                (change)="onChange()">
+            </label>
+          </div>
       </div>
     </div>
     <div class="form-group">
-      <div class="input-group">
-        <span class="input-group-addon success">编号</span>
-        <input type="text" [(ngModel)]="identifier" class="form-control" placeholder="人员编号">
+        <div ngbDropdown>
+          <button class="btn btn-primary" type="button" ngbDropdownToggle>
+            {{ depart.Name }}
+          </button>
+          <ul class="dropdown-menu">
+            <li class="dropdown-item" *ngFor="let v of departs" (click)="this.depart=v">{{ v.Name }}</li>
+          </ul>
+        </div>
       </div>
-      <div class="input-group">
-        <span class="input-group-addon success">姓名</span>
-        <input type="text" [(ngModel)]="name" class="form-control" placeholder="人员姓名">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-addon success">编号</span>
+          <input type="text" [(ngModel)]="identifier" class="form-control" placeholder="人员编号">
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon success">姓名</span>
+          <input type="text" [(ngModel)]="name" class="form-control" placeholder="人员姓名">
+        </div>
       </div>
-    </div>
   </div>
   <div class="modal-footer">
     <button class="btn btn-md btn-primary btn-sm" (click)="addClerk()">添 加</button>

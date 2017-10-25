@@ -148,10 +148,6 @@ export class UploadComponent {
 		this.uploadInput.emit(event);
 	}
 	
-	cancelUpload(id: string): void {
-		this.uploadInput.emit({ type: 'cancel', id: id });
-	}
-	
 	removeFile(f: UploadFile): void {
 		if (f.progress.status != UploadStatus.Uploading) {
 			this.uploadInput.emit({ type: 'remove', id: f.id });

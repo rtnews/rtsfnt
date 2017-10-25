@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,EventEmitter } from '@angular/core';
 import { NewsService, Clerk,Depart } from '../../../@core/data/news.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from '@angular/common/http';
+
 import { NgModel } from '@angular/forms';
+import { UploadOutput, UploadInput, UploadFile, UploaderOptions } from 'ngx-uploader';
+import {ImageResult} from './interfaces';
 
 @Component({
   selector: 'ngx-mclerks',
@@ -11,14 +13,31 @@ import { NgModel } from '@angular/forms';
 })
 export class MClerksComponent implements OnInit {
 
+	files: UploadFile;
+  uploadInput: EventEmitter<UploadInput>;
+  options: UploaderOptions;
+  _select:boolean;
+  uploading:boolean;
+
   identifier:string='';
   name:string='';
+
+  _imageThumbnail: any;
 
   departs:Depart[];
   depart:Depart;
   
-  constructor(private activeModal: NgbActiveModal, private http: HttpClient,
-    private service: NewsService) {
+  closeOk:string;
+
+  constructor(private activeModal: NgbActiveModal, private service: NewsService) {
+		  this.options = { concurrency: 1 };
+      this.files = null;
+      this.uploadInput = new EventEmitter<UploadInput>();
+      this._select = false;
+      this.uploading = false;
+
+      this.closeOk = '×';
+
       this.departs = service.getDeparts();
       this.depart = this.departs[0];
   }
@@ -30,16 +49,88 @@ export class MClerksComponent implements OnInit {
 	closeModal() {
 		this.activeModal.close();
   }
+
+	onUploadOutput(output: UploadOutput): void {
+    console.error(output.type);
+		if (output.type === 'allAddedToQueue') {
+		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
+      this._select = true;
+      this.files = output.file;
+      let result: ImageResult = {
+        file: null,
+        url: null
+      };
+      this.fileToDataURL(this.files.nativeFile, result).then(r => {
+        this._imageThumbnail = r.dataURL;
+      });
+		} else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+			this.uploading = true;
+      this.closeOk = '⊙';
+      this.files = output.file;
+		} else if (output.type === 'removed') {
+      this.files = null;
+      this._select = false;
+		} else if (output.type == 'done') {
+			if (output.file.responseStatus != 200) {
+			} else {
+        var obj = output.file.response;
+        this.service.changeClerk.emit(obj);
+      }
+      this.uploading = false;
+      this.closeOk = '×';
+		}
+  }
   
   addClerk(): void {
-    this.http.post('/api/clerk/addClerk', {
-      "Identifier": this.identifier,
-      "Name": this.name,
-      "Depart":this.depart.Name
-    }).subscribe(res => {
-      this.service.changeClerk.emit(res as Clerk);
-      this.activeModal.close();
+    const event: UploadInput = {
+			type: 'uploadAll',
+			url: '/Upload/UploadClerk',
+      method: 'POST',
+      data: {
+         Identifier: this.identifier,
+         Name: this.name,
+         Depart: this.depart.Name
+      }
+    };
+    this.uploadInput.emit(event);
+  }
+
+	isUploading(): boolean {
+		return this.uploading;
+  }
+
+  get select() {
+    return this._select;
+  }
+
+  set select(value) {
+    this._select = value;
+  }
+
+  get imageThumbnail() {
+    return this._imageThumbnail;
+  }
+
+  set imageThumbnail(value) {
+    this._imageThumbnail = value;
+  }
+
+  private fileToDataURL(file: File, result: ImageResult): Promise<ImageResult> {
+    return new Promise((resolve) => {
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        result.dataURL = reader.result;
+        resolve(result);
+      };
+      reader.readAsDataURL(file);
     });
+  }
+
+  onChange() {
+    if (this.files !== null && this.files !== undefined) {
+      console.error("onchange");
+      this.uploadInput.emit({ type: 'remove', id: this.files.id });
+    }
   }
 
 }
