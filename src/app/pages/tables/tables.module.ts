@@ -9,6 +9,7 @@ import { NewsService } from '../../@core/data/news.service';
 import { UploadComponent } from './upload/upload.component';
 import { MDepartComponent } from './mdepart/mdepart.component';
 import { MClerksComponent } from './mclerks/mclerks.component';
+import { MDpartComponent } from './mdpart/mdpart.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { MClerksComponent } from './mclerks/mclerks.component';
     ...routedComponents,
     UploadComponent,
     MDepartComponent,
-    MClerksComponent
+    MClerksComponent,
+    MDpartComponent
 ],
   providers: [
     NewsService,
@@ -30,7 +32,8 @@ import { MClerksComponent } from './mclerks/mclerks.component';
   entryComponents: [
     UploadComponent,
     MDepartComponent,
-    MClerksComponent
+    MClerksComponent,
+	MDpartComponent
   ],
 })
 export class TablesModule { }

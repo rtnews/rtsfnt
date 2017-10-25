@@ -32,6 +32,15 @@ export class Clerk {
   Identifier:string;
   Name:string;
   Depart:string;
+  Time:string;
+}
+
+export class Dpart {
+  Id:string;
+  Duty:string;
+  Identifier:string;
+  Name:string;
+  Depart:string;
 }
 
 export class DepartList {
@@ -51,6 +60,8 @@ export class NewsService {
   changeNewsTmp: EventEmitter<NewsTmp>;
   changeDepart: EventEmitter<Depart>;
   changeClerk: EventEmitter<Clerk>;
+  changeDpart: EventEmitter<Dpart>;
+  
   
   constructor(private http: HttpClient){
     this.changeHome = new EventEmitter();
@@ -59,6 +70,7 @@ export class NewsService {
     this.changeNewsTmp = new EventEmitter();
     this.changeDepart = new EventEmitter();
     this.changeClerk = new EventEmitter();
+    this.changeDpart = new EventEmitter();
     
     this.loadDeparts();
   }
