@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy,EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { UploadComponent } from '../upload/upload.component';
   templateUrl: './home.component.html'
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
 
   settings = {
     hideHeader: false,
@@ -56,12 +56,17 @@ export class HomeComponent {
   
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
-
+    service.changeHome = new EventEmitter();
     service.changeHome.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     });
   }
-  
+
+  ngOnDestroy(): void {
+    this.service.changeHome.unsubscribe();
+    this.service.changeHome = undefined;
+  }
+
   loadImageNews() {
     this.http.get('/api/news/gethomelist').subscribe(res => {
       (res as ImageNews[]).forEach(i => {

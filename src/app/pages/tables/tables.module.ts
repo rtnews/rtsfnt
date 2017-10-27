@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgUploaderModule } from 'ngx-uploader';
+import { MyDatePickerModule } from 'mydatepicker';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { TablesRoutingModule, routedComponents } from './tables-routing.module';
@@ -17,7 +18,8 @@ import { MDpartComponent } from './mdpart/mdpart.component';
     FormsModule,
     TablesRoutingModule,
     Ng2SmartTableModule,
-    NgUploaderModule
+    NgUploaderModule,
+	MyDatePickerModule
   ],
   declarations: [
     ...routedComponents,

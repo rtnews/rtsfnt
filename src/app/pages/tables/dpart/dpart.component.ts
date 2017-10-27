@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { NewsService, Clerk,Depart,Dpart } from '../../../@core/data/news.service';
 import { MDpartComponent } from '../mdpart/mdpart.component';
+import {IMyDpOptions, IMyDateModel} from 'mydatepicker';
 
 @Component({
   selector: 'ngx-dpart',
@@ -12,6 +13,13 @@ import { MDpartComponent } from '../mdpart/mdpart.component';
   styleUrls: ['./dpart.component.scss']
 })
 export class DpartComponent implements OnInit {
+  
+  public myDatePickerOptions: IMyDpOptions = {
+     dateFormat: 'yyyy.mm.dd',
+     showClearDateBtn:false,
+  };
+  public model: any;
+  locale:string = 'zh-cn';
 
   settings = {
     hideHeader: false,
@@ -63,22 +71,32 @@ export class DpartComponent implements OnInit {
       this.defaultDepart = {
         Id:"",
         Identifier:"",
-        Name:"还没有部门"
+        Name:"还没有部门",
+        DutyTime:""
       };
+      service.changeDpart = new EventEmitter();
       service.changeDpart.subscribe((value:Dpart)=>{
         this.source.prepend(value);
       });
-
+      var date = new Date();
+      date.setTime(Date.now());
       this.departs = service.getDeparts();
       if (this.departs.length > 0) {
         this.depart = this.departs[0];
+        date = new Date(this.depart.DutyTime);
       } else {
         this.depart = this.defaultDepart;
       }
+      this.model = { date: 
+        { year: date.getFullYear(), 
+          month: date.getMonth(), 
+          day: date.getDay() } };
+
       //var clerks = service.getClerks(this.depart.Identifier);
       //if (clerks.length > 0) {
       //  this.source.load(clerks);
       //}
+
       setTimeout(() => {
         this.isLoading = false;
       }, 500);
@@ -112,12 +130,26 @@ export class DpartComponent implements OnInit {
     }
   }
 
-  selectDepart(d: Depart): void {
-    this.depart = d;
+  selectDepart(depart: Depart): void {
+    this.depart = depart;
+    var date = new Date(this.depart.DutyTime);
+    this.model = { date: 
+      { year: date.getFullYear(), 
+        month: date.getMonth(), 
+        day: date.getDay() } };
     //var clerks = this.service.getClerks(this.depart.Identifier);
     //if (clerks.length > 0) {
     //  this.source.load(clerks);
     //}
-	}
+  }
+  
+  onDateChanged(event: IMyDateModel) {
+    this.depart.DutyTime = new Date(event.jsdate).toLocaleDateString();
+    this.http.post('/api/depart/ChangeDutyTime', {
+      "Identifier": this.depart.Id,
+      "DutyTime": this.depart.DutyTime
+    }).subscribe(res => {
+    });
+  }
   
 }

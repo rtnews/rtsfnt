@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { UploadComponent } from '../upload/upload.component';
   styleUrls: ['./notice.component.scss'],
   templateUrl: './notice.component.html'
 })
-export class NoticeComponent {
+export class NoticeComponent implements OnDestroy {
 
   settings = {
     hideHeader: false,
@@ -55,9 +55,15 @@ export class NoticeComponent {
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
     
+    service.changeNotice = new EventEmitter();
     service.changeNotice.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.service.changeNotice.unsubscribe();
+    this.service.changeNotice = undefined;
   }
   
   loadImageNews() {

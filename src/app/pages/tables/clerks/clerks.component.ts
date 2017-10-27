@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy,EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+
+import { Router } from '@angular/router';
 
 import { NewsService, Clerk,Depart } from '../../../@core/data/news.service';
 import { MClerksComponent } from '../mclerks/mclerks.component';
@@ -11,7 +13,7 @@ import { MClerksComponent } from '../mclerks/mclerks.component';
   templateUrl: './clerks.component.html',
   styleUrls: ['./clerks.component.scss']
 })
-export class ClerksComponent implements OnInit {
+export class ClerksComponent implements OnInit, OnDestroy {
 
   settings = {
     hideHeader: false,
@@ -37,6 +39,10 @@ export class ClerksComponent implements OnInit {
         title: '人员名称',
         type: 'string'
       },
+      Phone: {
+        title: '人员手机',
+        type: 'string'
+      },
     },
     noDataMessage: '没有数据',
   };
@@ -49,17 +55,22 @@ export class ClerksComponent implements OnInit {
   isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: NewsService,
-    private modalService: NgbModal) {
+    private modalService: NgbModal, private router: Router) {
       this.defaultDepart = {
         Id:"",
         Identifier:"",
-        Name:"还没有部门"
+        Name:"还没有部门",
+        DutyTime:""
       };
+      service.changeClerk = new EventEmitter();
       service.changeClerk.subscribe((value:Clerk)=>{
         this.source.prepend(value);
       });
-
       this.departs = service.getDeparts();
+      if (this.departs == null || this.departs == undefined) {
+        this.router.navigateByUrl('/tables/home');
+        return;
+      }
       if (this.departs.length > 0) {
         this.depart = this.departs[0];
       } else {
@@ -77,6 +88,11 @@ export class ClerksComponent implements OnInit {
   ngOnInit() {
   }
   
+  ngOnDestroy(): void {
+    this.service.changeClerk.unsubscribe();
+    this.service.changeClerk = undefined;
+  }
+  
   pushClerk() {
     this.modalService.open(MClerksComponent, {
       backdrop: 'static',
@@ -88,9 +104,11 @@ export class ClerksComponent implements OnInit {
     if (window.confirm('你确定要删除吗?')) {
       this.http.post('/api/clerk/deleteClerk', {
         "Id": event.data.Id,
-        "Name": event.data.Name
+        "Name": event.data.Icon
       }).subscribe(res => {
         if (res) {
+          this.service.deleteClerk(event.data.Id);
+          
           event.confirm.resolve();
         } else {
           event.confirm.reject();

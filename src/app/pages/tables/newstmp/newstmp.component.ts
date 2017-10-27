@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy,EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { UploadComponent } from '../upload/upload.component';
   templateUrl: './newstmp.component.html',
   styleUrls: ['./newstmp.component.scss']
 })
-export class NewsTmpComponent implements OnInit {
+export class NewsTmpComponent implements OnInit, OnDestroy {
   
   settings = {
     hideHeader: false,
@@ -46,7 +46,7 @@ export class NewsTmpComponent implements OnInit {
   
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadNewsTmp();
-    
+    service.changeNewsTmp = new EventEmitter();
     service.changeNewsTmp.subscribe((value:NewsTmp)=>{
       this.source.prepend(value);
     });
@@ -55,8 +55,12 @@ export class NewsTmpComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnDestroy(): void {
+    this.service.changeNewsTmp.unsubscribe();
+    this.service.changeNewsTmp = undefined;
+  }
+  
   loadNewsTmp() {
-    console.error("loadNewsTmp");
     this.http.get('/api/template/getnewstmplist').subscribe(res => {
       (res as NewsTmp[]).forEach(i => {
         this.source.prepend(i);

@@ -21,6 +21,7 @@ export class MClerksComponent implements OnInit {
 
   identifier:string='';
   name:string='';
+  phone:string='';
 
   _imageThumbnail: any;
 
@@ -35,7 +36,6 @@ export class MClerksComponent implements OnInit {
       this.uploadInput = new EventEmitter<UploadInput>();
       this._select = false;
       this.uploading = false;
-
       this.closeOk = '×';
 
       this.departs = service.getDeparts();
@@ -74,10 +74,11 @@ export class MClerksComponent implements OnInit {
 			if (output.file.responseStatus != 200) {
 			} else {
         var obj = output.file.response;
-        this.service.changeClerk.emit(obj);
+        this.service.pushClerks(obj);
       }
       this.uploading = false;
       this.closeOk = '×';
+      this.activeModal.close();
 		}
   }
   
@@ -89,12 +90,13 @@ export class MClerksComponent implements OnInit {
       data: {
          Identifier: this.identifier,
          Name: this.name,
-         Depart: this.depart.Name
+         Depart: this.depart.Name,
+         Phone: this.phone
       }
     };
     this.uploadInput.emit(event);
   }
-
+  
 	isUploading(): boolean {
 		return this.uploading;
   }
@@ -128,7 +130,6 @@ export class MClerksComponent implements OnInit {
 
   onChange() {
     if (this.files !== null && this.files !== undefined) {
-      console.error("onchange");
       this.uploadInput.emit({ type: 'remove', id: this.files.id });
     }
   }

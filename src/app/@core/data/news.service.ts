@@ -25,6 +25,7 @@ export class Depart {
   Id:string;
   Identifier:string;
   Name:string;
+  DutyTime:string;
 }
 
 export class Clerk {
@@ -32,7 +33,8 @@ export class Clerk {
   Identifier:string;
   Name:string;
   Depart:string;
-  Time:string;
+  Icon:string;
+  Phone:string;
 }
 
 export class Dpart {
@@ -62,15 +64,14 @@ export class NewsService {
   changeClerk: EventEmitter<Clerk>;
   changeDpart: EventEmitter<Dpart>;
   
-  
   constructor(private http: HttpClient){
-    this.changeHome = new EventEmitter();
-    this.changeNotice = new EventEmitter();
-    this.changeGlobal = new EventEmitter();
-    this.changeNewsTmp = new EventEmitter();
-    this.changeDepart = new EventEmitter();
-    this.changeClerk = new EventEmitter();
-    this.changeDpart = new EventEmitter();
+    this.changeHome = undefined;
+    this.changeNotice = undefined;
+    this.changeGlobal = undefined;
+    this.changeNewsTmp = undefined;
+    this.changeDepart = undefined;
+    this.changeClerk = undefined;
+    this.changeDpart = undefined;
     
     this.loadDeparts();
   }
@@ -83,16 +84,36 @@ export class NewsService {
     });
   }
 
+  pushDepart(depart:Depart) {
+    if (this.changeDepart !== null && this.changeDepart !== undefined) {
+      this.changeDepart.emit(depart);
+    } else {
+      this.departs.push(depart);
+    }
+  }
+
   deleteDepart(id:string) {
-    this.departs.filter(i => i.Id = id);
+    this.departs = this.departs.filter(i => i.Id !== id);
   }
 
   getDeparts() {
     return this.departs;
   }
   
+  pushClerks(clerk:Clerk) {
+    if (this.changeClerk !== null && this.changeClerk !== undefined) {
+      this.changeClerk.emit(clerk);
+    } else {
+      this.clerks.push(clerk);
+    }
+  }
+
+  deleteClerk(id:string) {
+    this.clerks = this.clerks.filter(i => i.Id !== id);
+  }
+
   getClerks(name:string) {
     return this.clerks.filter(i => i.Depart == name);
   }
-
+  
 }

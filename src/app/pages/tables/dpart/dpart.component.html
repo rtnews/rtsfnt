@@ -3,15 +3,24 @@
   </div>
   <nb-card>
     <nb-card-header>
-      <div ngbDropdown>
-        <button class="btn btn-primary" type="button" ngbDropdownToggle>
-            {{ depart.Name }}
-        </button>
-        <ul class="dropdown-menu">
-            <li class="dropdown-item" *ngFor="let v of departs" (click)="selectDepart(v)">{{ v.Name }}</li>
-        </ul>
+      <div class="row">
+        <div class="col-sm-3" ngbDropdown>
+          <button class="btn btn-primary btn-sm" type="button" ngbDropdownToggle>
+              {{ depart.Name }}
+          </button>
+          <ul class="dropdown-menu">
+              <li class="dropdown-item" *ngFor="let v of departs" (click)="selectDepart(v)">{{ v.Name }}</li>
+          </ul>
+        </div>
+        <div class="col-sm-2 divspan">
+          <span class="viewcl">起始时间:</span>
+        </div>
+        <div class="col-sm-3 divdate">
+          <my-date-picker name="mydate" [options]="myDatePickerOptions" (dateChanged)="onDateChanged($event)"
+              [locale]="locale" [(ngModel)]="model" required></my-date-picker>
+        </div>
       </div>
-      <button class="btn btn-primary btn-sm" (click)="pushDpart()">添加部门值班</button>
+      <button class="btn btn-primary btn-sm" (click)="pushDpart()">添加</button>
     </nb-card-header>
     <nb-card-body>
       <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">

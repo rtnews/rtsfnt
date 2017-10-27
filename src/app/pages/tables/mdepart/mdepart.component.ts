@@ -13,6 +13,7 @@ export class MDepartComponent implements OnInit {
 
   identifier:string='';
   name:string='';
+  adding:boolean = false;
   
   constructor(private activeModal: NgbActiveModal, private http: HttpClient,
     private service: NewsService) {
@@ -27,11 +28,16 @@ export class MDepartComponent implements OnInit {
   }
   
   addDepart(): void {
+    if (this.adding) {
+      return;
+    }
+    this.adding = true;
+    console.error("addDepart");
     this.http.post('/api/depart/adddepart', {
       "Identifier": this.identifier,
       "Name": this.name
     }).subscribe(res => {
-      this.service.changeDepart.emit(res as Depart);
+      this.service.pushDepart(res as Depart);
       this.activeModal.close();
     });
   }

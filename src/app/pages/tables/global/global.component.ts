@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, EventEmitter } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +12,7 @@ import { UploadComponent } from '../upload/upload.component';
   templateUrl: './global.component.html'
 })
 
-export class GlobalComponent {
+export class GlobalComponent implements OnDestroy {
 
   settings = {
     hideHeader: false,
@@ -57,11 +57,17 @@ export class GlobalComponent {
   constructor(private http: HttpClient, private service: NewsService, private modalService: NgbModal) {
     this.loadImageNews();
     
+    service.changeGlobal = new EventEmitter();
     service.changeGlobal.subscribe((value:ImageNews)=>{
       this.source.prepend(value);
     });
   }
   
+  ngOnDestroy(): void {
+    this.service.changeGlobal.unsubscribe();
+    this.service.changeGlobal = undefined;
+  }
+
   loadImageNews() {
     this.http.get('/api/news/getgloblist').subscribe(res => {
       (res as ImageNews[]).forEach(i => {
