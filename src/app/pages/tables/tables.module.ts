@@ -4,6 +4,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgUploaderModule } from 'ngx-uploader';
 import { MyDatePickerModule } from 'mydatepicker';
 
+import { ToasterModule } from 'angular2-toaster';
+
 import { ThemeModule } from '../../@theme/theme.module';
 import { TablesRoutingModule, routedComponents } from './tables-routing.module';
 import { NewsService } from '../../@core/data/news.service';
@@ -19,7 +21,8 @@ import { MDpartComponent } from './mdpart/mdpart.component';
     TablesRoutingModule,
     Ng2SmartTableModule,
     NgUploaderModule,
-	MyDatePickerModule
+    MyDatePickerModule,
+    ToasterModule
   ],
   declarations: [
     ...routedComponents,

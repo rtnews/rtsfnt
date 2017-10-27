@@ -92,8 +92,12 @@ export class NewsService {
     }
   }
 
-  deleteDepart(id:string) {
-    this.departs = this.departs.filter(i => i.Id !== id);
+  canDelDepart(name:string) {
+    return ( this.clerks.findIndex(i => i.Depart == name) == -1);
+  }
+
+  findDepartById(id:string) {
+    return this.departs.find(i => i.Id == id);
   }
 
   getDeparts() {
@@ -108,6 +112,10 @@ export class NewsService {
     }
   }
 
+  addClerks(clerk:Clerk) {
+    this.clerks.push(clerk);
+  }
+
   deleteClerk(id:string) {
     this.clerks = this.clerks.filter(i => i.Id !== id);
   }
@@ -115,5 +123,9 @@ export class NewsService {
   getClerks(name:string) {
     return this.clerks.filter(i => i.Depart == name);
   }
-  
+
+  getAllClerks() {
+    return this.clerks;
+  }
+
 }

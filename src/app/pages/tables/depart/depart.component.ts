@@ -8,6 +8,10 @@ import { Router } from '@angular/router';
 import { NewsService, Depart } from '../../../@core/data/news.service';
 import { MDepartComponent } from '../mdepart/mdepart.component';
 
+import { ToasterService, ToasterConfig, Toast, BodyOutputType } from 'angular2-toaster';
+
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-depart',
   templateUrl: './depart.component.html',
@@ -15,6 +19,18 @@ import { MDepartComponent } from '../mdepart/mdepart.component';
 })
 export class DepartComponent implements OnInit, OnDestroy {
   
+  config: ToasterConfig;
+
+  position: string = 'toast-top-right';
+  animationType: string = 'fade';
+  timeout: number = 2000;
+  toastsLimit: number = 5;
+
+  isNewestOnTop: boolean = true;
+  isHideOnClick: boolean = true;
+  isDuplicatesPrevented: boolean = false;
+  isCloseButton: boolean = true;
+
   settings = {
     hideHeader: false,
     hideSubHeader: true,
@@ -47,10 +63,10 @@ export class DepartComponent implements OnInit, OnDestroy {
   isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: NewsService,
-     private modalService: NgbModal, private router: Router) {
+     private modalService: NgbModal, private router: Router,
+     private toasterService: ToasterService) {
       this.service.changeDepart = new EventEmitter();
       this.service.changeDepart.subscribe((value:Depart)=>{
-        console.error("changeDepart");
         this.source.prepend(value);
       });
       const departs = this.service.getDeparts();
@@ -58,9 +74,7 @@ export class DepartComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/tables/home');
         return;
       }
-      if (departs.length > 0) {
-        this.source.load(departs);
-      }
+      this.source.load(departs);
       setTimeout(() => {
         this.isLoading = false;
       }, 500);
@@ -82,14 +96,18 @@ export class DepartComponent implements OnInit, OnDestroy {
   }
   
   onDeleteConfirm(event): void {
+    if (!this.service.canDelDepart(event.data.Name)) {
+      this.showToast('warning', '不能删除部门', '先删除部门里的人员,再删除部门');
+      return;
+    }
     if (window.confirm('你确定要删除吗?')) {
       this.http.post('/api/depart/deleteDepart', {
         "Id": event.data.Id,
         "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
-          this.service.deleteDepart(event.data.Id);
-          
+          var depart = this.service.findDepartById(event.data.Id);
+          this.source.remove(depart);
           event.confirm.resolve();
         } else {
           event.confirm.reject();
@@ -99,4 +117,26 @@ export class DepartComponent implements OnInit, OnDestroy {
       event.confirm.reject();
     }
   }
+
+  private showToast(type: string, title: string, body: string) {
+    this.config = new ToasterConfig({
+      positionClass: this.position,
+      timeout: this.timeout,
+      newestOnTop: this.isNewestOnTop,
+      tapToDismiss: this.isHideOnClick,
+      preventDuplicates: this.isDuplicatesPrevented,
+      animation: this.animationType,
+      limit: this.toastsLimit,
+    });
+    const toast: Toast = {
+      type: type,
+      title: title,
+      body: body,
+      timeout: this.timeout,
+      showCloseButton: this.isCloseButton,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
+  }
+
 }

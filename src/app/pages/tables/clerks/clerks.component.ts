@@ -39,6 +39,10 @@ export class ClerksComponent implements OnInit, OnDestroy {
         title: '人员名称',
         type: 'string'
       },
+      Depart: {
+        title: '部门',
+        type: 'string'
+      },
       Phone: {
         title: '人员手机',
         type: 'string'
@@ -57,27 +61,35 @@ export class ClerksComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private service: NewsService,
     private modalService: NgbModal, private router: Router) {
       this.defaultDepart = {
-        Id:"",
+        Id:"0x000F",
         Identifier:"",
-        Name:"还没有部门",
+        Name:"所有部门",
         DutyTime:""
       };
       service.changeClerk = new EventEmitter();
       service.changeClerk.subscribe((value:Clerk)=>{
-        this.source.prepend(value);
+        if (value.Depart == this.depart.Name) {
+          this.source.prepend(value);
+        } else if (this.depart.Id == "0x000F") {
+          this.source.prepend(value);
+        } else {
+          //service.addClerks(value);
+        }
       });
-      this.departs = service.getDeparts();
-      if (this.departs == null || this.departs == undefined) {
+      var departs:Depart[] = service.getDeparts();
+      if (departs == null || departs == undefined) {
         this.router.navigateByUrl('/tables/home');
         return;
       }
-      if (this.departs.length > 0) {
-        this.depart = this.departs[0];
+      this.departs = new Array<Depart>();
+      this.departs.push(this.defaultDepart);
+      this.departs = this.departs.concat(departs);
+      this.depart = this.departs[0];
+      if (this.depart.Id == "0x000F") {
+        var clerks = service.getAllClerks();
+        this.source.load(clerks);
       } else {
-        this.depart = this.defaultDepart;
-      }
-      var clerks = service.getClerks(this.depart.Identifier);
-      if (clerks.length > 0) {
+        var clerks = service.getClerks(this.depart.Name);
         this.source.load(clerks);
       }
       setTimeout(() => {
@@ -121,8 +133,11 @@ export class ClerksComponent implements OnInit, OnDestroy {
 
   selectDepart(d: Depart): void {
     this.depart = d;
-    var clerks = this.service.getClerks(this.depart.Identifier);
-    if (clerks.length > 0) {
+    if (this.depart.Id == "0x000F") {
+      var clerks = this.service.getAllClerks();
+      this.source.load(clerks);
+    } else {
+      var clerks = this.service.getClerks(this.depart.Name);
       this.source.load(clerks);
     }
 	}
