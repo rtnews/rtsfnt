@@ -87,13 +87,16 @@ export class NewsService {
   pushDepart(depart:Depart) {
     if (this.changeDepart !== null && this.changeDepart !== undefined) {
       this.changeDepart.emit(depart);
-    } else {
-      this.departs.push(depart);
     }
+    this.departs.push(depart);
   }
 
   canDelDepart(name:string) {
     return ( this.clerks.findIndex(i => i.Depart == name) == -1);
+  }
+
+  deleteDepart(id:string) {
+    this.departs = this.departs.filter(i => i.Id !== id);
   }
 
   findDepartById(id:string) {
@@ -107,12 +110,7 @@ export class NewsService {
   pushClerks(clerk:Clerk) {
     if (this.changeClerk !== null && this.changeClerk !== undefined) {
       this.changeClerk.emit(clerk);
-    } else {
-      this.clerks.push(clerk);
     }
-  }
-
-  addClerks(clerk:Clerk) {
     this.clerks.push(clerk);
   }
 
