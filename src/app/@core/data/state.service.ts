@@ -28,13 +28,13 @@ export class StateService {
 
   protected sidebars: any = [
     {
-      name: 'Left Sidebar',
+      name: '左边栏',
       icon: 'nb-layout-sidebar-left',
       id: 'left',
       selected: true,
     },
     {
-      name: 'Right Sidebar',
+      name: '右边栏',
       icon: 'nb-layout-sidebar-right',
       id: 'right',
     },
