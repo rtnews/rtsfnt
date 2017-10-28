@@ -54,7 +54,6 @@ export class MClerksComponent implements OnInit {
   }
 
 	onUploadOutput(output: UploadOutput): void {
-    console.error(output.type);
 		if (output.type === 'allAddedToQueue') {
 		} else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
       this._select = true;

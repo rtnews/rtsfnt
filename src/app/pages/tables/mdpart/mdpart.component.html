@@ -1,3 +1,40 @@
-<p>
-  mdpart works!
-</p>
+<div>
+	<div class="modal-header">
+		<span>添加部门值班</span>
+		<button class="close" aria-label="Close" (click)="closeModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+    <toaster-container [toasterconfig]="config"></toaster-container>
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon success">值班编号</span>
+        <input type="text" [(ngModel)]="identifier" class="form-control" placeholder="输入数字">
+      </div>
+    </div>
+    <div class="form-group">
+      <div ngbDropdown>
+        <button class="btn btn-outline-primary" type="button" ngbDropdownToggle>
+          {{ depart.Name }}
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" *ngFor="let v of departs" (click)="selectDepart(v)">{{ v.Name }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="form-group">
+      <div ngbDropdown>
+        <button class="btn btn-outline-primary" type="button" ngbDropdownToggle>
+          {{ clerk.Name }}
+        </button>
+        <ul class="dropdown-menu">
+          <li class="dropdown-item" *ngFor="let v of clerks" (click)="selectClerk(v)">{{ v.Name }}</li>
+        </ul>
+      </div>
+    </div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-md btn-primary btn-sm" (click)="addDpart()">添 加</button>
+	</div>
+</div>

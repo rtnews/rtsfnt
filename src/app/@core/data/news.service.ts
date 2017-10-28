@@ -39,8 +39,8 @@ export class Clerk {
 
 export class Dpart {
   Id:string;
-  Duty:string;
-  Identifier:string;
+  Identifier:number;
+  ClerkId:string;
   Name:string;
   Depart:string;
 }
@@ -48,6 +48,7 @@ export class Dpart {
 export class DepartList {
   Departs:Depart[];
   Clerks:Clerk[];
+  Dparts:Dpart[];
 }
 
 @Injectable()
@@ -55,6 +56,7 @@ export class NewsService {
 
   departs: Depart[];
   clerks: Clerk[];
+  dparts: Dpart[];
 
   changeHome: EventEmitter<ImageNews>;
   changeNotice: EventEmitter<ImageNews>;
@@ -81,6 +83,7 @@ export class NewsService {
       var departList = res as DepartList;
       this.departs = departList.Departs;
       this.clerks = departList.Clerks;
+      this.dparts = departList.Dparts;
     });
   }
 
@@ -92,7 +95,13 @@ export class NewsService {
   }
 
   canDelDepart(name:string) {
-    return ( this.clerks.findIndex(i => i.Depart == name) == -1);
+    if ( this.clerks.findIndex(i => i.Depart == name) !== -1) {
+      return false;
+    }
+    if ( this.dparts.findIndex(i => i.Depart == name) !== -1) {
+      return false;
+    }
+    return true;
   }
 
   deleteDepart(id:string) {
@@ -124,6 +133,21 @@ export class NewsService {
 
   getAllClerks() {
     return this.clerks;
+  }
+
+  pushDpart(dpart:Dpart) {
+    if (this.changeDpart !== null && this.changeDpart !== undefined) {
+      this.changeDpart.emit(dpart);
+    }
+    this.dparts.push(dpart);
+  }
+
+  deleteDpart(id:string) {
+    this.dparts = this.dparts.filter(i => i.Id !== id);
+  }
+
+  getDparts(name:string) {
+    return this.dparts.filter(i => i.Depart == name);
   }
 
 }

@@ -105,7 +105,7 @@ export class DepartComponent implements OnInit, OnDestroy {
   
   onDeleteConfirm(event): void {
     if (!this.service.canDelDepart(event.data.Name)) {
-      this.showToast('warning', '不能删除部门', '先删除部门里的人员,再删除部门');
+      this.showToast('warning', '不能删除部门', '先删除相关部门的人员和值班');
       return;
     }
     if (window.confirm('你确定要删除吗?')) {

@@ -21,11 +21,11 @@ export class OndutyComponent implements OnInit {
       delete: false,
     },
     columns: {
-      Duty: {
-        title: '值班编号',
-        type: 'string'
-      },
       Identifier: {
+        title: '值班编号',
+        type: 'number'
+      },
+      ClerkId: {
         title: '人员编号',
         type: 'string'
       },
@@ -52,7 +52,7 @@ export class OndutyComponent implements OnInit {
   }
 
   loadOnDuty() {
-    this.http.get('/api/dpart/getOnDutyList').subscribe(res => {
+    this.http.get('/api/dpart/getDutyList').subscribe(res => {
       (res as Dpart[]).forEach(i => {
         this.source.prepend(i);
       });
@@ -61,4 +61,5 @@ export class OndutyComponent implements OnInit {
       }, 500);
     });
   }
+
 }

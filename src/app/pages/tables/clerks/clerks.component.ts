@@ -56,7 +56,7 @@ export class ClerksComponent implements OnInit, OnDestroy {
         type: 'string'
       },
       Depart: {
-        title: '部门',
+        title: '部门名称',
         type: 'string'
       },
       Phone: {
@@ -79,12 +79,11 @@ export class ClerksComponent implements OnInit, OnDestroy {
     private modalService: NgbModal, private router: Router,
     private toasterService: ToasterService) {
       this.defaultDepart = {
-        Id:"0x000F",
+        Id:"0xFFFFF",
         Identifier:"",
         Name:"所有部门",
         DutyTime:""
       };
-      
       const departs = service.getDeparts();
       if (departs == null || departs == undefined) {
         this.router.navigateByUrl('/tables/home');
@@ -95,7 +94,7 @@ export class ClerksComponent implements OnInit, OnDestroy {
       this.departs = this.departs.concat(departs);
       this.depart = this.departs[0];
 
-      if (this.depart.Id == "0x000F") {
+      if (this.depart.Id == "0xFFFFF") {
         var clerks = service.getAllClerks();
         this.clerks = [];
         this.clerks = this.clerks.concat(clerks);
@@ -108,7 +107,7 @@ export class ClerksComponent implements OnInit, OnDestroy {
       service.changeClerk.subscribe((value:Clerk)=>{
         if (value.Depart == this.depart.Name) {
           this.source.prepend(value);
-        } else if (this.depart.Id == "0x000F") {
+        } else if (this.depart.Id == "0xFFFFF") {
           this.source.prepend(value);
         } else {
         }
@@ -162,7 +161,7 @@ export class ClerksComponent implements OnInit, OnDestroy {
 
   selectDepart(depart: Depart): void {
     this.depart = depart;
-    if (this.depart.Id == "0x000F") {
+    if (this.depart.Id == "0xFFFFF") {
       var clerks = this.service.getAllClerks();
       this.clerks = [];
       this.clerks = this.clerks.concat(clerks);
