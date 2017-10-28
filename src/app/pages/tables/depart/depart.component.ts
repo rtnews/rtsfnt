@@ -59,22 +59,27 @@ export class DepartComponent implements OnInit, OnDestroy {
     noDataMessage: '没有数据',
   };
   
+  departs:Depart[];
   source: LocalDataSource = new LocalDataSource();
   isLoading:boolean = true;
   
   constructor(private http: HttpClient, private service: NewsService,
      private modalService: NgbModal, private router: Router,
      private toasterService: ToasterService) {
-      this.service.changeDepart = new EventEmitter();
-      this.service.changeDepart.subscribe((value:Depart)=>{
-        this.source.prepend(value);
-      });
       const departs = this.service.getDeparts();
       if (departs == null || departs == undefined) {
         this.router.navigateByUrl('/tables/home');
         return;
       }
-      this.source.load(departs);
+      this.departs = [];
+      this.departs = this.departs.concat(departs);
+      this.source.load(this.departs);
+      
+      this.service.changeDepart = new EventEmitter();
+      this.service.changeDepart.subscribe((value:Depart)=>{
+        this.source.prepend(value);
+      });
+
       setTimeout(() => {
         this.isLoading = false;
       }, 500);
@@ -84,8 +89,11 @@ export class DepartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.service.changeDepart.unsubscribe();
-    this.service.changeDepart = undefined;
+    if (this.service.changeDepart !== undefined && 
+      this.service.changeDepart !== null) {
+        this.service.changeDepart.unsubscribe();
+        this.service.changeDepart = undefined;
+      }
   }
   
   pushDepart() {
@@ -106,8 +114,7 @@ export class DepartComponent implements OnInit, OnDestroy {
         "Name": event.data.Name
       }).subscribe(res => {
         if (res) {
-          var depart = this.service.findDepartById(event.data.Id);
-          this.source.remove(depart);
+          this.service.deleteDepart(event.data.Id);
           event.confirm.resolve();
         } else {
           event.confirm.reject();

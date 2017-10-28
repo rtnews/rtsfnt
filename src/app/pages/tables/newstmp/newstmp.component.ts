@@ -56,8 +56,11 @@ export class NewsTmpComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.service.changeNewsTmp.unsubscribe();
-    this.service.changeNewsTmp = undefined;
+    if (this.service.changeNewsTmp !== undefined && 
+      this.service.changeNewsTmp !== null) {
+        this.service.changeNewsTmp.unsubscribe();
+        this.service.changeNewsTmp = undefined;
+      }
   }
   
   loadNewsTmp() {

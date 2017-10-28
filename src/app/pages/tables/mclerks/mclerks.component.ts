@@ -18,6 +18,7 @@ export class MClerksComponent implements OnInit {
   options: UploaderOptions;
   _select:boolean;
   uploading:boolean;
+  adding:boolean;
 
   identifier:string='';
   name:string='';
@@ -40,6 +41,8 @@ export class MClerksComponent implements OnInit {
 
       this.departs = service.getDeparts();
       this.depart = this.departs[0];
+
+      this.adding = false;
   }
 
   ngOnInit() {
@@ -83,6 +86,17 @@ export class MClerksComponent implements OnInit {
   }
   
   addClerk(): void {
+    if (this.identifier == '' || this.name == '' ||
+        this.phone == '') {
+          return;
+        }
+    if (this._select == false) {
+      return;
+    }
+    if (this.adding) {
+      return;
+    }
+    this.adding = true;
     const event: UploadInput = {
 			type: 'uploadAll',
 			url: '/Upload/UploadClerk',

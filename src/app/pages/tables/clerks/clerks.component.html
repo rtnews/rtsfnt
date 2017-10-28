@@ -14,6 +14,7 @@
     <button class="btn btn-primary btn-sm" (click)="pushClerk()">添加部门人员</button>
   </nb-card-header>
   <nb-card-body>
+      <toaster-container [toasterconfig]="config"></toaster-container>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>

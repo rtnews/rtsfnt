@@ -62,8 +62,11 @@ export class NoticeComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.service.changeNotice.unsubscribe();
-    this.service.changeNotice = undefined;
+    if (this.service.changeNotice !== undefined && 
+      this.service.changeNotice !== null) {
+        this.service.changeNotice.unsubscribe();
+        this.service.changeNotice = undefined;
+      }
   }
   
   loadImageNews() {

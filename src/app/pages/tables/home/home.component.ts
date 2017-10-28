@@ -63,8 +63,11 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.service.changeHome.unsubscribe();
-    this.service.changeHome = undefined;
+    if (this.service.changeHome !== undefined && 
+      this.service.changeHome !== null) {
+        this.service.changeHome.unsubscribe();
+        this.service.changeHome = undefined;
+      }
   }
 
   loadImageNews() {

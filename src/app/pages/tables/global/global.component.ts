@@ -64,8 +64,11 @@ export class GlobalComponent implements OnDestroy {
   }
   
   ngOnDestroy(): void {
-    this.service.changeGlobal.unsubscribe();
-    this.service.changeGlobal = undefined;
+    if (this.service.changeGlobal !== undefined && 
+      this.service.changeGlobal !== null) {
+        this.service.changeGlobal.unsubscribe();
+        this.service.changeGlobal = undefined;
+      }
   }
 
   loadImageNews() {

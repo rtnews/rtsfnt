@@ -28,6 +28,9 @@ export class MDepartComponent implements OnInit {
   }
   
   addDepart(): void {
+    if (this.identifier == '' || this.name == '') {
+      return;
+    }
     if (this.adding) {
       return;
     }
