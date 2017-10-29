@@ -21,7 +21,7 @@
         <div class="img-ul-file-upload img-ul-hr-inline-group">
             <label class="img-ul-upload img-ul-button">
               <span>选择照片</span>
-              <input type="file"
+              <input type="file" accept="image/png"
                 ngFileSelect [options]="options"
                 (uploadOutput)="onUploadOutput($event)" 
                 [uploadInput]="uploadInput"
