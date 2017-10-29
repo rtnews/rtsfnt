@@ -74,7 +74,7 @@ export class NewsService {
     this.changeDepart = undefined;
     this.changeClerk = undefined;
     this.changeDpart = undefined;
-    
+
     this.loadDeparts();
   }
   

@@ -49,6 +49,7 @@ export class UploadComponent {
 	options: UploaderOptions;
 	errors:string;
 	uploading:boolean;
+	start:boolean;
 
 	constructor(private activeModal: NgbActiveModal, private service: NewsService)
 	{
@@ -70,6 +71,7 @@ export class UploadComponent {
 		this.errors = '';
 		this.uploadInput = new EventEmitter<UploadInput>();
 		this.humanizeBytes = humanizeBytes;
+		this.start = false;
 	}
 	
 	closeModal() {
@@ -89,6 +91,9 @@ export class UploadComponent {
 			if (!this.uploading) {
 				this.uploading = true;
 				this.closeOk = '⊙';
+			}
+			if (this.start) {
+				this.start = false;
 			}
 			const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
 			this.files[index] = output.file;
@@ -138,6 +143,13 @@ export class UploadComponent {
 	}
 
 	startUpload(): void {
+		if (this.files.length < 1) {
+			return;
+		}
+		if (this.start) {
+			return;
+		}
+		this.start = true;
 		const event: UploadInput = {
 			type: 'uploadAll',
 			url: this.uploadData.url,
