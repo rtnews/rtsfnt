@@ -105,9 +105,9 @@ export class DpartComponent implements OnInit,OnDestroy {
         
         var date = new Date(this.depart.DutyTime);
         this.model = { date: 
-          { year: date.getFullYear(), 
-            month: date.getMonth(), 
-            day: date.getDay() } };
+          { year: date.getUTCFullYear(), 
+            month: date.getUTCMonth() + 1, 
+            day: date.getUTCDate() + 1 } };
       } else {
         this.departs.push(this.defaultDepart);
         this.depart = this.defaultDepart;
@@ -115,9 +115,9 @@ export class DpartComponent implements OnInit,OnDestroy {
         var date = new Date();
         date.setTime(Date.now());
         this.model = { date: 
-          { year: date.getFullYear(), 
-            month: date.getMonth(), 
-            day: date.getDay() } };
+          { year: date.getUTCFullYear(), 
+            month: date.getUTCMonth() + 1, 
+            day: date.getUTCDate() + 1 } };
       }
 
       if (this.depart.Id == "0xFFFFF") {
@@ -188,15 +188,15 @@ export class DpartComponent implements OnInit,OnDestroy {
       var date = new Date();
       date.setTime(Date.now());
       this.model = { date: 
-        { year: date.getFullYear(), 
-          month: date.getMonth(), 
-          day: date.getDay() } };
+        { year: date.getUTCFullYear(), 
+          month: date.getUTCMonth() + 1, 
+          day: date.getUTCDate() + 1 } };
     } else {
       var date = new Date(this.depart.DutyTime);
       this.model = { date: 
-        { year: date.getFullYear(), 
-          month: date.getMonth(), 
-          day: date.getDay() } };
+        { year: date.getUTCFullYear(), 
+          month: date.getUTCMonth() + 1, 
+          day: date.getUTCDate() + 1 } };
     }
     if (this.depart.Id == "0xFFFFF") {
       this.dparts = [];
@@ -215,6 +215,9 @@ export class DpartComponent implements OnInit,OnDestroy {
       "Identifier": this.depart.Id,
       "DutyTime": this.depart.DutyTime
     }).subscribe(res => {
+      if (res) {
+        //this.service.updateDepartDuty(this.depart);
+      }
     });
   }
   

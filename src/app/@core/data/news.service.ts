@@ -104,6 +104,11 @@ export class NewsService {
     return true;
   }
 
+  updateDepartDuty(depart:Depart) {
+    this.departs = this.departs.filter(i => i.Id !== depart.Id);
+    this.departs.push(depart);
+  }
+
   deleteDepart(id:string) {
     this.departs = this.departs.filter(i => i.Id !== id);
   }
