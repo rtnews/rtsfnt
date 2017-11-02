@@ -78,7 +78,9 @@ export class MDpartComponent implements OnInit {
       "Identifier": this.identifier,
       "ClerkId": this.clerk.Identifier,
       "Name": this.clerk.Name,
-      "Depart": this.depart.Name
+      "Depart": this.clerk.Depart,
+      "Phone": this.clerk.Phone,
+      "Icon": this.clerk.Icon
     }).subscribe(res => {
       this.service.pushDpart(res as Dpart);
       this.activeModal.close();
