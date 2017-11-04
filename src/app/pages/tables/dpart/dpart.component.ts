@@ -104,20 +104,36 @@ export class DpartComponent implements OnInit,OnDestroy {
         this.depart = this.departs[0];
         
         var date = new Date(this.depart.DutyTime);
-        this.model = { date: 
-          { year: date.getUTCFullYear(), 
-            month: date.getUTCMonth() + 1, 
-            day: date.getUTCDate() + 1 } };
+        if (this.changeMonth(date.getUTCFullYear(),
+          date.getUTCMonth(), date.getUTCDate())) {
+          this.model = { date: 
+            { year: date.getUTCFullYear(), 
+              month: date.getUTCMonth() + 2, 
+              day: 1 } };
+        } else {
+          this.model = { date: 
+            { year: date.getUTCFullYear(), 
+              month: date.getUTCMonth() + 1, 
+              day: date.getUTCDate() + 1 } };
+        }
       } else {
         this.departs.push(this.defaultDepart);
         this.depart = this.defaultDepart;
         
         var date = new Date();
         date.setTime(Date.now());
+        if (this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate())) {
         this.model = { date: 
           { year: date.getUTCFullYear(), 
-            month: date.getUTCMonth() + 1, 
-            day: date.getUTCDate() + 1 } };
+            month: date.getUTCMonth() + 2, 
+            day: 1 } };
+        } else {
+          this.model = { date: 
+            { year: date.getUTCFullYear(), 
+              month: date.getUTCMonth() + 1, 
+              day: date.getUTCDate() + 1 } };
+        }
       }
 
       if (this.depart.Id == "0xFFFFF") {
@@ -181,22 +197,60 @@ export class DpartComponent implements OnInit,OnDestroy {
     }
   }
   
+  changeMonth(year:number, month:number, day:number): boolean {
+    if (day == 31) {
+      return true;
+    }
+    else if (day == 30) {
+      var m:number[] = [3, 5, 8, 10 ];
+      m.forEach(i => {
+        if (i == day) {
+          return true;
+        }
+      });
+    } else if (month == 1) {
+      if (day == 28) {
+        return true;
+      }
+      if ( (day == 27) && ((year % 4) != 0) ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   selectDepart(depart: Depart): void {
     this.depart = depart;
 
     if (this.depart.Id == '0xFFFFF') {
       var date = new Date();
       date.setTime(Date.now());
-      this.model = { date: 
-        { year: date.getUTCFullYear(), 
-          month: date.getUTCMonth() + 1, 
-          day: date.getUTCDate() + 1 } };
+      if (this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate())) {
+          this.model = { date: 
+            { year: date.getUTCFullYear(), 
+              month: date.getUTCMonth() + 2, 
+              day: 1 } };
+        } else {
+          this.model = { date: 
+            { year: date.getUTCFullYear(), 
+              month: date.getUTCMonth() + 1, 
+              day: date.getUTCDate() + 1 } };
+        }
     } else {
       var date = new Date(this.depart.DutyTime);
-      this.model = { date: 
-        { year: date.getUTCFullYear(), 
-          month: date.getUTCMonth() + 1, 
-          day: date.getUTCDate() + 1 } };
+      if (this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate())) {
+        this.model = { date: 
+          { year: date.getUTCFullYear(), 
+            month: date.getUTCMonth() + 2, 
+            day: 1 } };
+      } else {
+        this.model = { date: 
+          { year: date.getUTCFullYear(), 
+            month: date.getUTCMonth() + 1, 
+            day: date.getUTCDate() + 1 } };
+      }
     }
     if (this.depart.Id == "0xFFFFF") {
       this.dparts = [];
@@ -216,7 +270,6 @@ export class DpartComponent implements OnInit,OnDestroy {
       "DutyTime": this.depart.DutyTime
     }).subscribe(res => {
       if (res) {
-        //this.service.updateDepartDuty(this.depart);
       }
     });
   }
