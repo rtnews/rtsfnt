@@ -104,37 +104,28 @@ export class DpartComponent implements OnInit,OnDestroy {
         this.depart = this.departs[0];
         
         var date = new Date(this.depart.DutyTime);
-        if (this.changeMonth(date.getUTCFullYear(),
-          date.getUTCMonth(), date.getUTCDate())) {
-          this.model = { date: 
-            { year: date.getUTCFullYear(), 
-              month: date.getUTCMonth() + 2, 
-              day: 1 } };
-        } else {
-          this.model = { date: 
-            { year: date.getUTCFullYear(), 
-              month: date.getUTCMonth() + 1, 
-              day: date.getUTCDate() + 1 } };
-        }
+        
+        var tmpDate = this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate());
+        this.model = { date: 
+          { year: tmpDate[0], 
+            month: tmpDate[1], 
+            day: tmpDate[2] } };
       } else {
         this.departs.push(this.defaultDepart);
         this.depart = this.defaultDepart;
         
         var date = new Date();
         date.setTime(Date.now());
-        if (this.changeMonth(date.getUTCFullYear(),
-        date.getUTCMonth(), date.getUTCDate())) {
+
+        var tmpDate = this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate());
         this.model = { date: 
-          { year: date.getUTCFullYear(), 
-            month: date.getUTCMonth() + 2, 
-            day: 1 } };
-        } else {
-          this.model = { date: 
-            { year: date.getUTCFullYear(), 
-              month: date.getUTCMonth() + 1, 
-              day: date.getUTCDate() + 1 } };
-        }
-      }
+          { year: tmpDate[0], 
+            month: tmpDate[1], 
+            day: tmpDate[2] } };
+      };
+
 
       if (this.depart.Id == "0xFFFFF") {
         this.dparts = [];
@@ -197,26 +188,31 @@ export class DpartComponent implements OnInit,OnDestroy {
     }
   }
   
-  changeMonth(year:number, month:number, day:number): boolean {
+  changeMonth(year:number, month:number, day:number) {
     if (day == 31) {
-      return true;
+      if (month == 11) {
+        return [year + 1, 1, 1];
+      } else {
+        return [year, month + 2, 1];
+      }
     }
     else if (day == 30) {
       var m:number[] = [3, 5, 8, 10 ];
-      m.forEach(i => {
-        if (i == day) {
-          return true;
+      for (var index = 0; index < m.length; index++) {
+        var element = m[index];
+        if (element == month) {
+          return [year, month + 2, 1];
         }
-      });
+      };
     } else if (month == 1) {
-      if (day == 28) {
-        return true;
+      if (day == 29) {
+        return [year, month + 2, 1];
       }
-      if ( (day == 27) && ((year % 4) != 0) ) {
-        return true;
+      if ( (day == 28) && ((year % 4) != 0) ) {
+        return [year, month + 2, 1];
       }
     }
-    return false;
+    return [year, month + 1, day + 1];
   }
 
   selectDepart(depart: Depart): void {
@@ -225,32 +221,22 @@ export class DpartComponent implements OnInit,OnDestroy {
     if (this.depart.Id == '0xFFFFF') {
       var date = new Date();
       date.setTime(Date.now());
-      if (this.changeMonth(date.getUTCFullYear(),
-        date.getUTCMonth(), date.getUTCDate())) {
-          this.model = { date: 
-            { year: date.getUTCFullYear(), 
-              month: date.getUTCMonth() + 2, 
-              day: 1 } };
-        } else {
-          this.model = { date: 
-            { year: date.getUTCFullYear(), 
-              month: date.getUTCMonth() + 1, 
-              day: date.getUTCDate() + 1 } };
-        }
+
+      var tmpDate = this.changeMonth(date.getUTCFullYear(),
+        date.getUTCMonth(), date.getUTCDate());
+        this.model = { date: 
+          { year: tmpDate[0], 
+            month: tmpDate[1], 
+            day: tmpDate[2] } };
     } else {
       var date = new Date(this.depart.DutyTime);
-      if (this.changeMonth(date.getUTCFullYear(),
-        date.getUTCMonth(), date.getUTCDate())) {
-        this.model = { date: 
-          { year: date.getUTCFullYear(), 
-            month: date.getUTCMonth() + 2, 
-            day: 1 } };
-      } else {
-        this.model = { date: 
-          { year: date.getUTCFullYear(), 
-            month: date.getUTCMonth() + 1, 
-            day: date.getUTCDate() + 1 } };
-      }
+
+      var tmpDate = this.changeMonth(date.getUTCFullYear(),
+      date.getUTCMonth(), date.getUTCDate());
+      this.model = { date: 
+        { year: tmpDate[0], 
+          month: tmpDate[1], 
+          day: tmpDate[2] } };
     }
     if (this.depart.Id == "0xFFFFF") {
       this.dparts = [];
